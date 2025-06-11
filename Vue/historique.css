@@ -1,0 +1,40 @@
+.historique {
+    padding: 60px 20px;
+    background-color: #fdfdfd;
+  }
+  
+  .historique h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .historique p {
+    margin-bottom: 30px;
+    font-size: 1rem;
+  }
+  
+  .historique-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .historique-table th,
+  .historique-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .historique-table th {
+    background-color: #8e2de2;
+    color: white;
+  }
+  
+  .historique-table tr:hover {
+    background-color: #f3f3f3;
+  }
+  
