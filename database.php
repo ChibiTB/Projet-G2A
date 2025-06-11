@@ -5,7 +5,7 @@ $user = 'G2';
 $pass = 'APPG2-BDD';
 
 //$host = 'localhost';
-//$dbname = 'dBreeze';
+//$dbname = 'dbreeze';
 //$user = 'root';
 //$pass = '';
 
