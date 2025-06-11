@@ -4,22 +4,82 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DBreeze - Accueil</title>
-  <link rel="stylesheet" href="Vue/style.css" />
+  <link rel="stylesheet" href="Vue/index.css" />
   <link rel="stylesheet" href="Vue/header.css" />
   <link rel="stylesheet" href="Vue/footer.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div id="header-placeholder"></div>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Supervision en temps réel</h1>
+                <p>Contrôlez votre environnement en un coup d'œil</p>
+            </div>
+        </section>
 
-  <main class="hero">
-    <div class="container">
-      <h2>Bienvenue sur DBreeze</h2>
-      <p>Un vent nouveau souffle sur votre organisation de données.</p>
-      <a href="#" class="btn">Découvrir</a>
-    </div>
-  </main>
+        <section id="supervision" class="sensors-section">
+            <div class="section-title">
+                <h2>TABLEAU DE BORD</h2>
+                <p class="subtitle" >Tous vos capteurs en temps réel</p>
+            </div>
+
+            <div class="sensors-grid">
+                <div class="sensor-card sound">
+                    <div class="card-content">
+                        <i class="fas fa-volume-up"></i>
+                        <h3>Niveau Sonore</h3>
+                        <p>Ambiance parfaitement maîtrisée</p>
+                    </div>
+                </div>
+
+                <div class="sensor-card lighting">
+                    <div class="card-content">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Éclairage Dynamique</h3>
+                        <p>Une atmosphère unique</p>
+                    </div>
+                </div>
+
+                <div class="sensor-card co2">
+                    <div class="card-content">
+                        <i class="fas fa-wind"></i>
+                        <h3>Qualité de l'Air</h3>
+                        <p>Respirez la différence</p>
+                    </div>
+                </div>
+
+                <div class="sensor-card temperature">
+                    <div class="card-content">
+                        <i class="fas fa-temperature-high"></i>
+                        <h3>Température</h3>
+                        <p>Confort optimal</p>
+                    </div>
+                </div>
+
+                <div class="sensor-card crowd">
+                    <div class="card-content">
+                        <i class="fas fa-users"></i>
+                        <h3>Affluence</h3>
+                        <p>Gestion intelligente des espaces</p>
+                    </div>
+                </div>
+
+                <div class="sensor-card security">
+                    <div class="card-content">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Sécurité</h3>
+                        <p>Protection continue</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
   <div id="footer-placeholder"></div>
+
+  
 
   <script>
     // Injection dynamique du header et du footer
@@ -35,3 +95,4 @@
   </script>
 </body>
 </html>
+
