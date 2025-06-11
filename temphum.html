@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Capteurs en direct – DBreeze</title>
+  <link rel="stylesheet" href="Vue/temphum.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Température & Humidité – Suivi en temps réel</h2>
+    <canvas id="graphiqueCapteurs"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('graphiqueCapteurs').getContext('2d');
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['14h', '15h', '16h', '17h', '18h', '19h'],
+        datasets: [
+          {
+            label: 'Température (°C)',
+            data: [22.1, 22.8, 23.5, 24.0, 24.2, 23.7],
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: 'Humidité (%)',
+            data: [50, 52, 55, 58, 57, 54],
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: 'Valeur'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Heure'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top'
+          },
+          title: {
+            display: true,
+            text: 'Évolution des valeurs sur la journée'
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
