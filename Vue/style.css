@@ -1,10 +1,11 @@
-/* Reset de base */
+/* RESET GLOBAL */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
+  /* CORPS DE PAGE */
   body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -12,46 +13,14 @@
     color: #333;
   }
   
-  /* Container central */
+  /* CONTAINER CENTRAL */
   .container {
     width: 90%;
     max-width: 1200px;
     margin: auto;
   }
   
-  /* Header */
-  header {
-    background-color: #0077b6;
-    padding: 20px 0;
-    color: white;
-  }
-  
-  .logo {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-  
-  nav {
-    margin-top: 10px;
-  }
-  
-  .nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .nav-links a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Section principale */
+  /* SECTION HERO (Page d'accueil) */
   .hero {
     background-color: #caf0f8;
     text-align: center;
@@ -81,14 +50,5 @@
   
   .btn:hover {
     background-color: #023e8a;
-  }
-  
-  /* Footer */
-  footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-    margin-top: 50px;
   }
   
