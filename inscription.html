@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'inscription</title>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6Lcagq8qAAAAAHKzx912oZfWqfnI-JOOSKyOFcdQ"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Vue/inscription.css"></head>
+
+<body>
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
+        }
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Lcagq8qAAAAAHKzx912oZfWqfnI-JOOSKyOFcdQ', { action: 'submit' }).then(function(token) {
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    </script>
+
+    <form id="demo-form" action="php/inscription.php" method="post">
+        <div class="form-container">
+            <img src="../images/Design_sans_titre__1_-removebg-preview.png" alt="Logo DBreeze" class="logo">            <h2><strong>FORMULAIRE D'INSCRIPTION</strong></h2>
+
+            <!-- Form Group for Username -->
+            <div class="form-group">
+                <label>Nom d'utilisateur</label>
+                <input type="text" name="nom_utilisateur" required>
+            </div>
+
+            <!-- Form Group for Email -->
+            <div class="form-group">
+                <label>Adresse mail</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <!-- Form Group for Password -->
+            <div class="form-group">
+                <label>Mot de Passe</label>
+                <input type="password" id="password" name="mot_de_passe" required>
+                <!-- List of Constraints -->
+                <ul class="constraint-list" id="password-constraints">
+                    <li class="constraint-item" id="length-constraint">
+                        <span>✖</span> Au moins 9 caractères
+                    </li>
+                    <li class="constraint-item" id="letter-constraint">
+                        <span>✖</span> Contient au moins une lettre
+                    </li>
+                    <li class="constraint-item" id="number-constraint">
+                        <span>✖</span> Contient au moins un chiffre
+                    </li>
+                    <li class="constraint-item" id="special-constraint">
+                        <span>✖</span> Contient au moins un caractère spécial
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Message de validation reCAPTCHA -->
+            <div class="recaptcha-message">
+                <p><em>Veuillez prouver que vous n'êtes pas un robot en remplissant le reCAPTCHA ci-dessous.</em></p>
+            </div>
+
+            <!-- reCAPTCHA -->
+            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+            <button type="submit" class="g-recaptcha" data-sitekey="6Lcagq8qAAAAAHKzx912oZfWqfnI-JOOSKyOFcdQ" data-callback='onSubmit' data-action='submit'>
+                s'inscrire
+            </button>
+        </div>
+    </form>
+
+    <script>
+        // Sélection des éléments
+        const passwordInput = document.getElementById('password');
+        const lengthConstraint = document.getElementById('length-constraint');
+        const letterConstraint = document.getElementById('letter-constraint');
+        const numberConstraint = document.getElementById('number-constraint');
+        const specialConstraint = document.getElementById('special-constraint');
+
+        // Fonction de validation
+        function validatePassword() {
+            const password = passwordInput.value;
+
+            // Vérification des contraintes
+            const isLongEnough = password.length >= 9;
+            const hasLetter = /[A-Za-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            // Mise à jour des indicateurs
+            updateConstraint(lengthConstraint, isLongEnough);
+            updateConstraint(letterConstraint, hasLetter);
+            updateConstraint(numberConstraint, hasNumber);
+            updateConstraint(specialConstraint, hasSpecial);
+        }
+
+        // Mettre à jour les contraintes (✔ ou ✖)
+        function updateConstraint(constraintElement, isValid) {
+            const icon = constraintElement.querySelector('span');
+            if (isValid) {
+                icon.textContent = '✔';
+                constraintElement.classList.add('valid');
+                constraintElement.classList.remove('invalid');
+            } else {
+                icon.textContent = '✖';
+                constraintElement.classList.add('invalid');
+                constraintElement.classList.remove('valid');
+            }
+        }
+
+        // Écouter les changements sur le champ mot de passe
+        passwordInput.addEventListener('input', validatePassword);
+    </script>
+</body>
+
+</html>
