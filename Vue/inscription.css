@@ -1,0 +1,140 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg,
+  #a0b6ed,  /* blue */
+  #7090e1,
+  #cf8ee0,  /* violet */
+  #eb89aa,  /* rose */
+  #e78f6d,  /* orange pastel */
+  #eba96f,
+  #ffcf9c
+);
+        background-size: 400% 400%;
+        animation: gradientAnimation 10s ease infinite;
+    }
+
+    @keyframes gradientAnimation {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+
+/* Pour le form */
+.form-container {
+    background-color: rgba(255, 255, 255, 0.5); /* blanc à 50% de transparence */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Form header */
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+h1 {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+/* Form groupes */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #ffb3b3;
+    outline: none;
+}
+
+/* Bouton */
+.button-inscription {
+    width: 100%;
+    padding: 10px;
+    background-color: #080808;
+    color: #ffffff;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.button-inscription:hover {
+    background-color: #ffb3b3;
+}
+
+.constraint-list {
+    margin: 10px 0;
+    padding: 0;
+    list-style-type: none;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.constraint-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.constraint-item span {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.valid {
+    color: green;
+}
+
+.invalid {
+    color: red;
+}
+.logo {
+    display: block;
+    margin: 0 auto 20px auto;
+    max-width: 255px;
+    height: auto;
+}
