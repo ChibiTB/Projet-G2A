@@ -13,14 +13,14 @@
     color: #333;
   }
   
-  /* CONTAINER CENTRAL */
+
   .container {
     width: 90%;
     max-width: 1200px;
     margin: auto;
   }
   
-  /* SECTION HERO (Page d'accueil) */
+
   .hero {
     background-color: #caf0f8;
     text-align: center;
