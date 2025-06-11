@@ -3,23 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <title>Capteurs en direct – DBreeze</title>
+  <link rel="stylesheet" href="Vue/style.css">
   <link rel="stylesheet" href="Vue/temphum.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <div class="container">
-    <h2>Température & Humidité – Suivi en temps réel</h2>
-    <canvas id="graphiqueCapteurs"></canvas>
-  </div>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content" class="main-capteurs">
+    <div class="containers">
+      <h2>Température & Humidité – Suivi en temps réel</h2>
+      <canvas id="graphiqueCapteurs"></canvas>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
 
   <script>
+    async function includeHTML(selector, url) {
+  const element = document.querySelector(selector);
+  const response = await fetch(url);
+  element.innerHTML = await response.text();
+
+  // Ajout du padding-top une fois le header chargé
+  if (selector === "#header-placeholder") {
+    setTimeout(() => {
+      const header = element.querySelector('.header');
+      const main = document.getElementById('main-content');
+      if (header && main) {
+        const height = header.offsetHeight;
+        main.style.paddingTop = `${height + 20}px`; // Ajoute 20px d'espace
+      }
+    }, 100);
+  }
+
+  // Ajout du padding-bottom une fois le footer chargé
+  if (selector === "#footer-placeholder") {
+    setTimeout(() => {
+      const footer = element.querySelector('footer');
+      const main = document.getElementById('main-content');
+      if (footer && main) {
+        const height = footer.offsetHeight;
+        main.style.paddingBottom = `${20}px`; // Ajoute 20px d'espace
+      }
+    }, 100);
+  }
+}
+
+    includeHTML("#header-placeholder", "header.html");
+    includeHTML("#footer-placeholder", "footer.html");
+
+    // Graphique
     const ctx = document.getElementById('graphiqueCapteurs').getContext('2d');
 
     const chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['14h', '15h', '16h', '17h', '18h', '19h'],
+        labels: ['23h', '00h', '01h', '02h', '03h', '04h'],
         datasets: [
           {
             label: 'Température (°C)',
@@ -62,7 +103,7 @@
           },
           title: {
             display: true,
-            text: 'Évolution des valeurs sur la journée'
+            text: 'Évolution des valeurs sur la soirée'
           }
         }
       }
