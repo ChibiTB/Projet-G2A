@@ -34,10 +34,10 @@
   background: linear-gradient(135deg,
   #a0b6ed,  /* blue */
   #7090e1,
-  #cf8ee0,  /* violet */
-  #eb89aa,  /* rose */
-  #e78f6d,  /* orange pastel */
-  #eba96f,
+  #ca66e3,  /* violet */
+  #f0729c,  /* rose */
+  #de805b,  /* orange pastel */
+  #e08f49,
   #ffcf9c
 );        background-size: 400% 400%;
         animation: gradientAnimation 10s ease infinite;
