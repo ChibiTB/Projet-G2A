@@ -1,33 +1,50 @@
-header {
-    background: linear-gradient(90deg, #8e2de2, #f27121);
-    padding: 20px 0;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .logo {
-    font-size: 2rem;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  }
-  
-  .nav-links {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 10px;
-  }
-  
-  .nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: transform 0.2s ease, text-shadow 0.2s ease;
-  }
-  
-  .nav-links a:hover {
-    transform: scale(1.05);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-  }
-  
+/* Global */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #f0f0f0;
+}
+
+/* Header transparent */
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5); /* blanc transparent */
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 999;
+}
+
+/* Container for spacing */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo img {
+  height: 40px;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 30px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #222;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover {
+  color: #f0729c; /* doux violet en survol */
+}
