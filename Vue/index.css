@@ -71,16 +71,6 @@ section {
     display: inline-block;
 }
 
-.section-title h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-}
 
 /* Grille des capteurs */
 .sensors-grid {
