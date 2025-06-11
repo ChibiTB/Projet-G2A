@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Historique sonore – DBreeze</title>
+  <link rel="stylesheet" href="../public/css/style.css">
+  <link rel="stylesheet" href="../public/css/historique.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="historique">
+    <div class="container">
+      <h2>Historique sonore de la semaine</h2>
+      <p>Voici les niveaux sonores captés par le système DBreeze lors des dernières soirées :</p>
+
+      <table class="historique-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Niveau max (dB)</th>
+            <th>Durée > 94 dB (min)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025-06-10</td>
+            <td>101.3 dB</td>
+            <td>42 min</td>
+          </tr>
+          <tr>
+            <td>2025-06-09</td>
+            <td>97.5 dB</td>
+            <td>21 min</td>
+          </tr>
+          <tr>
+            <td>2025-06-08</td>
+            <td>89.7 dB</td>
+            <td>0 min</td>
+          </tr>
+          <tr>
+            <td>2025-06-07</td>
+            <td>96.2 dB</td>
+            <td>17 min</td>
+          </tr>
+          <tr>
+            <td>2025-06-06</td>
+            <td>93.1 dB</td>
+            <td>5 min</td>
+          </tr>
+          <tr>
+            <td>2025-06-05</td>
+            <td>105.9 dB</td>
+            <td>65 min</td>
+          </tr>
+          <tr>
+            <td>2025-06-04</td>
+            <td>92.3 dB</td>
+            <td>0 min</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    // Inclusion dynamique du header/footer
+    async function includeHTML(selector, url) {
+      const element = document.querySelector(selector);
+      const response = await fetch(url);
+      element.innerHTML = await response.text();
+    }
+
+    includeHTML("#header-placeholder", "header.html");
+    includeHTML("#footer-placeholder", "footer.html");
+  </script>
+</body>
+</html>
