@@ -13,8 +13,6 @@
 <body>
   <div id="header-placeholder"></div>
 
-
-
   <main>
     <section class="hero">
       <div class="hero-content">
@@ -26,11 +24,10 @@
     <!-- ✅ Message de bienvenue -->
     <div class="welcome-message" id="welcome-message"></div>
 
-
-    <!-- ✅ Compteur de décibels statique -->
+    <!-- ✅ Compteur de décibels dynamique -->
     <section class="decibel-led">
       <h3>Niveau sonore actuel</h3>
-      <div class="led-display">72 dB</div>
+      <div class="led-display" id="niveau-sonore">...</div>
     </section>
 
     <!-- ✅ Tableau de bord -->
@@ -94,7 +91,7 @@
 
   <div id="footer-placeholder"></div>
 
-  <!-- ✅ Script d’injection et prénom -->
+  <!-- ✅ Scripts -->
   <script>
     async function includeHTML(selector, url) {
       const element = document.querySelector(selector);
@@ -112,6 +109,22 @@
       const welcome = document.getElementById("welcome-message");
       welcome.innerHTML = `<h2 style="text-align:center; color: var(--color-primary); margin: 3rem 0;">Bienvenue ${prenom} 👋</h2>`;
     }
+
+    // ✅ Mise à jour dynamique du niveau sonore
+    async function updateNiveauSonore() {
+      try {
+        const response = await fetch('get_last_sonore.php');
+        const data = await response.json();
+        const valeur = data.sonore !== null ? `${data.sonore} dB` : 'N/A';
+        document.getElementById('niveau-sonore').textContent = valeur;
+      } catch (error) {
+        console.error('Erreur de récupération sonore :', error);
+        document.getElementById('niveau-sonore').textContent = 'Erreur';
+      }
+    }
+
+    updateNiveauSonore();
+    setInterval(updateNiveauSonore, 5000);
   </script>
 </body>
 </html>
