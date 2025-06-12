@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  .containers {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(217, 2, 250, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  canvas {
+    max-width: 100%;
+  }
+  
+  /* Style spécifique pour le graphique de distance */
+  .main-capteurs {
+    padding: 20px;
+  }
+  
+  /* Animation de chargement pour le graphique */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .containers {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Style pour l'indicateur de dernière mise à jour */
+  .last-update {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+  }
+  
+  #updateTime {
+    font-weight: 600;
+    color: #333;
+  } 
