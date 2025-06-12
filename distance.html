@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Capteur de Distance – DBreeze</title>
+  <link rel="stylesheet" href="Vue/style.css" />
+  <link rel="stylesheet" href="Vue/distance.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <main id="main-content" class="main-capteurs">
+    <div class="containers">
+      <h2>Distance – Suivi en temps réel</h2>
+      <canvas id="graphiqueCapteurs"></canvas>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    async function includeHTML(selector, url) {
+      const element = document.querySelector(selector);
+      const response = await fetch(url);
+      element.innerHTML = await response.text();
+
+      if (selector === "#header-placeholder") {
+        setTimeout(() => {
+          const header = element.querySelector('.header');
+          const main = document.getElementById('main-content');
+          if (header && main) {
+            const height = header.offsetHeight;
+            main.style.paddingTop = `${height + 20}px`;
+          }
+        }, 100);
+      }
+
+      if (selector === "#footer-placeholder") {
+        setTimeout(() => {
+          const footer = element.querySelector('footer');
+          const main = document.getElementById('main-content');
+          if (footer && main) {
+            const height = footer.offsetHeight;
+            main.style.paddingBottom = `20px`;
+          }
+        }, 100);
+      }
+    }
+
+    includeHTML("#header-placeholder", "header.html");
+    includeHTML("#footer-placeholder", "footer.html");
+
+    const ctx = document.getElementById('graphiqueCapteurs').getContext('2d');
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Distance (cm)',
+            data: [],
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: 'Distance (cm)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Heure'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top'
+          },
+          title: {
+            display: true,
+            text: 'Évolution en temps réel de la distance'
+          }
+        }
+      }
+    });
+
+    async function fetchDataAndUpdateChart() {
+      try {
+        const response = await fetch('get_distance.php');
+        const data = await response.json();
+
+        // Filtrer uniquement les enregistrements avec distance présente
+        const filtered = data.filter(entry => entry.distance !== undefined);
+
+        // Extraire les labels (heures) et valeurs
+        const labels = filtered.map(entry => {
+          const d = new Date(entry.date);
+          return d.toLocaleTimeString('fr-FR', { hour12: false });
+        });
+        const distanceData = filtered.map(entry => entry.distance);
+
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = distanceData;
+        chart.update();
+      } catch (error) {
+        console.error('Erreur lors du chargement des données :', error);
+      }
+    }
+
+    // Chargement initial + mise à jour toutes les 3 secondes
+    fetchDataAndUpdateChart();
+    setInterval(fetchDataAndUpdateChart, 3000);
+  </script>
+
+</body>
+</html>
