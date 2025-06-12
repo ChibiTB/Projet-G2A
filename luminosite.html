@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Capteur de lumière – DBreeze</title>
+    <link rel="stylesheet" href="Vue/style.css">
+    <link rel="stylesheet" href="Vue/luminosite.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<main id="main-content" class="main-capteurs">
+    <div class="containers">
+        <h2>Luminosité – Suivi en temps réel</h2>
+        <canvas id="graphiqueLumiere"></canvas>
+    </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script>
+    // Fonction pour inclure header et footer
+    async function includeHTML(selector, url) {
+        const element = document.querySelector(selector);
+        const response = await fetch(url);
+        element.innerHTML = await response.text();
+
+        // Ajustement du padding-top après chargement du header
+        if (selector === "#header-placeholder") {
+            setTimeout(() => {
+                const header = element.querySelector('.header');
+                const main = document.getElementById('main-content');
+                if (header && main) {
+                    const height = header.offsetHeight;
+                    main.style.paddingTop = `${height + 20}px`;
+                }
+            }, 100);
+        }
+
+        // Ajustement du padding-bottom après chargement du footer
+        if (selector === "#footer-placeholder") {
+            setTimeout(() => {
+                const footer = element.querySelector('footer');
+                const main = document.getElementById('main-content');
+                if (footer && main) {
+                    const height = footer.offsetHeight;
+                    main.style.paddingBottom = `${20}px`;
+                }
+            }, 100);
+        }
+    }
+
+    // Charger header et footer
+    includeHTML("#header-placeholder", "header.html");
+    includeHTML("#footer-placeholder", "footer.html");
+</script>
+
+<script>
+    const ctx = document.getElementById('graphiqueLumiere').getContext('2d');
+
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['23h', '00h', '01h', '02h', '03h', '04h'],
+            datasets: [{
+                label: 'Lumière (0–4096)',
+                data: [800, 1000, 2500, 2900, 3100, 3200],
+                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    suggestedMin: 0,
+                    suggestedMax: 4096,
+                    title: {
+                        display: true,
+                        text: 'Valeur'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Heure'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Évolution de la lumière – Valeur brute (ADC)'
+                }
+            }
+        }
+    });
+
+    async function updateGraph() {
+        const response = await fetch('getLuminosite.php');
+        const data = await response.json();
+
+        const labels = data.map(point => point.date);
+        const valeurs = data.map(point => point.valeur);
+
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = valeurs;
+        chart.update();
+    }
+
+    updateGraph(); // Chargement initial
+    setInterval(updateGraph, 2000); // Mise à jour toutes les 2s
+</script>
+
+</body>
+</html>
