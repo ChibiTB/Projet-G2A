@@ -97,7 +97,7 @@
     });
 
     async function updateGraph() {
-        const response = await fetch('getLuminosite.php');
+        const response = await fetch('get_luminosite.php');
         const data = await response.json();
 
         const labels = data.map(point => point.date_mesure);
