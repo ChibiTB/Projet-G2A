@@ -365,3 +365,43 @@ section {
         font-size: 14px;
     }
 } 
+/* Message de bienvenue */
+.welcome-message h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  /* Compteur LED style */
+  .decibel-led {
+    text-align: center;
+    margin: 3rem 0 6rem;
+  }
+  
+  .decibel-led h3 {
+    font-size: 1.5rem;
+    color: var(--color-dark);
+    margin-bottom: 1.2rem;
+  }
+  
+  .led-display {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    padding: 1rem 3rem;
+    border-radius: 20px;
+    color: black;
+    background: linear-gradient(90deg, #f6d365, #fda085, #f7797d, #ec6ead, #5f72bd);
+    background-size: 300% 300%;
+    animation: glow 4s ease infinite;
+    display: inline-block;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    letter-spacing: 2px;
+  }
+  
+  @keyframes glow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }

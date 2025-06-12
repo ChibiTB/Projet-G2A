@@ -8,81 +8,91 @@
   <link rel="stylesheet" href="Vue/header.css" />
   <link rel="stylesheet" href="Vue/footer.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="header-placeholder"></div>
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Supervision en temps réel</h1>
-                <p>Contrôlez votre environnement en un coup d'œil</p>
-            </div>
-        </section>
 
-        <section id="supervision" class="sensors-section">
-            <div class="section-title">
-                <h2>TABLEAU DE BORD</h2>
-                <p class="subtitle" >Tous vos capteurs en temps réel</p>
-            </div>
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Supervision en temps réel</h1>
+        <p>Contrôlez votre environnement en un coup d'œil</p>
+      </div>
+    </section>
 
-            <div class="sensors-grid">
-                <div class="sensor-card sound" onclick="window.location.href='historique.html'">
-                    <div class="card-content">
-                        <i class="fas fa-volume-up"></i>
-                        <h3>Niveau Sonore</h3>
-                        <p>Ambiance parfaitement maîtrisée</p>
-                    </div>
-                </div>
+    <!-- ✅ Message de bienvenue -->
+    <div class="welcome-message" id="welcome-message"></div>
 
-                <div class="sensor-card lighting" onclick="window.location.href='luminosite.html'">
-                    <div class="card-content">
-                        <i class="fas fa-lightbulb"></i>
-                        <h3>Luminosité</h3>
-                        <p>Une atmosphère unique</p>
-                    </div>
-                </div>
+    <!-- ✅ Compteur de décibels statique -->
+    <section class="decibel-led">
+      <h3>Niveau sonore actuel</h3>
+      <div class="led-display">72 dB</div>
+    </section>
 
-                <button class="sensor-card co2" onclick="window.location.href='temphum.html'">
-                    <div class="card-content">
-                        <i class="fas fa-wind"></i>
-                        <h3>Humidité de l'air</h3>
-                        <p>Respirez la différence</p>
-                    </div>
-                </button>
+    <!-- ✅ Tableau de bord -->
+    <section id="supervision" class="sensors-section">
+      <div class="section-title">
+        <h2>TABLEAU DE BORD</h2>
+        <p class="subtitle">Tous vos capteurs en temps réel</p>
+      </div>
 
-                <button class="sensor-card temperature" onclick="window.location.href='temphum.html'">
-                    <div class="card-content">
-                        <i class="fas fa-temperature-high"></i>
-                        <h3>Température & Humidité</h3>
-                        <p>Confort optimal</p>
-                    </div>
-                </button>
+      <div class="sensors-grid">
+        <div class="sensor-card sound" onclick="window.location.href='historique.html'">
+          <div class="card-content">
+            <i class="fas fa-volume-up"></i>
+            <h3>Niveau Sonore</h3>
+            <p>Ambiance parfaitement maîtrisée</p>
+          </div>
+        </div>
 
-                <button class="sensor-card crowd" onclick="window.location.href='#'">
-                    <div class="card-content">
-                      <i class="fas fa-users"></i>
-                      <h3>Affluence</h3>
-                      <p>Gestion intelligente des espaces</p>
-                    </div>
-                </button>
+        <div class="sensor-card lighting" onclick="window.location.href='luminosite.html'">
+          <div class="card-content">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Luminosité</h3>
+            <p>Une atmosphère unique</p>
+          </div>
+        </div>
 
-                <div class="sensor-card security" onclick="window.location.href='distance.html'">
-                    <div class="card-content">
-                        <i class="fas fa-shield-alt"></i>
-                        <h3>Sécurité</h3>
-                        <p>Protection continue</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+        <button class="sensor-card co2" onclick="window.location.href='temphum.html'">
+          <div class="card-content">
+            <i class="fas fa-wind"></i>
+            <h3>Humidité de l'air</h3>
+            <p>Respirez la différence</p>
+          </div>
+        </button>
+
+        <button class="sensor-card temperature" onclick="window.location.href='temphum.html'">
+          <div class="card-content">
+            <i class="fas fa-temperature-high"></i>
+            <h3>Température & Humidité</h3>
+            <p>Confort optimal</p>
+          </div>
+        </button>
+
+        <button class="sensor-card crowd" onclick="window.location.href='#'">
+          <div class="card-content">
+            <i class="fas fa-users"></i>
+            <h3>Affluence</h3>
+            <p>Gestion intelligente des espaces</p>
+          </div>
+        </button>
+
+        <div class="sensor-card security" onclick="window.location.href='distance.html'">
+          <div class="card-content">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Sécurité</h3>
+            <p>Protection continue</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <div id="footer-placeholder"></div>
 
-  
-
+  <!-- ✅ Script d’injection et prénom -->
   <script>
-    // Injection dynamique du header et du footer
     async function includeHTML(selector, url) {
       const element = document.querySelector(selector);
       const response = await fetch(url);
@@ -92,7 +102,13 @@
 
     includeHTML("#header-placeholder", "header.html");
     includeHTML("#footer-placeholder", "footer.html");
+
+    const params = new URLSearchParams(window.location.search);
+    const prenom = params.get("prenom");
+    if (prenom) {
+      const welcome = document.getElementById("welcome-message");
+      welcome.innerHTML = `<h2 style="text-align:center; color: var(--color-primary); margin: 3rem 0;">Bienvenue ${prenom} 👋</h2>`;
+    }
   </script>
 </body>
 </html>
-
