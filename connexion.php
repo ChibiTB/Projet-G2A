@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <link rel="stylesheet" href="Vue/connexion.css"></head>
+    <link rel="stylesheet" href="Vue/connexion.css">
 </head>
 
 <body>
+    <form action="connexion_verif.php" method="POST">
         <div class="form-container">
             <h1><strong>Se connecter</strong></h1>
 
