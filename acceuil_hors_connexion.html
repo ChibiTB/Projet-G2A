@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBreeze - </title>
+    <link rel="stylesheet" href="Vue/cookies.css">
+    <link rel="stylesheet" href="Vue/acceuil_hors_connexion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="gradient-shape"></div>
+    <div class="gradient-shape-2"></div>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo"><img src="images/LOGOdbreeze.png" ></a>
+            <div class="header-buttons">
+                <a href="connexion.php" class="btn btn-outline">Se connecter</a>
+                <a href="inscription.php" class="btn btn-primary">S'inscrire</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Bienvenue sur DBreeze</h1>
+            <p>La supervision en temps réel</p>
+            <a href="#events" class="cta-button" id="learn-more">EN SAVOIR PLUS</a>
+            <div class="app-preview">
+                <img src="image/phone.webp" alt="PartyNextDoor App" style="background: #86858544; padding: 20px;">
+            </div>
+        </div>
+    </section>
+
+    <section class="events" id="events">
+        <div class="events-header">
+            <h2>ÉVÉNEMENTS À LA UNE</h2>
+            <a href="tous-les-events.php" class="btn-voir-plus">Voir plus</a>
+        </div>
+        <div class="events-grid">
+            <!-- Exemple statique à la place de la boucle PHP -->
+            <a href="connexion.php">
+                <img src="image/exemple-event.jpg" alt="Événement Exemple" class="event-image">
+                <div class="event-content">
+                    <h3 class="event-title">Nom de l'Événement</h3>
+                    <p class="event-venue">Adresse de l'événement</p>
+                    <div class="event-details">
+                        <span>Sam 15 Juin | 21:00</span>
+                        <span>25,00€</span>
+                    </div>
+                    <div class="event-tags">
+                        <span class="tag">Concert</span>
+                    </div>
+                </div>
+            </a>
+            <p>Aucun événement disponible.</p>
+        </div>
+    </section>
+
+    <div id="cookie-popup" class="cookie-popup">
+        <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. En utilisant notre site, vous acceptez les cookies.</p>
+        <button id="accept-cookies">Accepter</button>
+        <button id="decline-cookies">Refuser</button>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-nav">
+                <div class="footer-section">
+                    <h4>DÉCOUVRIR</h4>
+                    <ul>
+                        <li><a href="connexion.php">Concerts</a></li>
+                        <li><a href="connexion.php">Soirées</a></li>
+                        <li><a href="connexion.php">Festivals</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>AIDE</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>LÉGAL</h4>
+                    <ul>
+                        <li><a href="politique-condition-utilisation.php">Conditions d'utilisation</a></li>
+                        <li><a href="politique-confidentialite.php">Politique de confidentialité</a></li>
+                        <li><a href="politique-cookie.php">Cookies</a></li>
+                        <li><a href="politique-mentions-legales.php">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p class="copyright-text">© 2024 PartyNextDoor. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('learn-more').addEventListener('click', function(e) {
+            e.preventDefault();
+            const eventsSection = document.getElementById('events');
+            eventsSection.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+    <script src="script/cookies.js"></script>
+</body>
+</html>
