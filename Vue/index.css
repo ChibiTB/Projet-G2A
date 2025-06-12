@@ -6,6 +6,10 @@
     --color-light: #fff;
     --color-gray: #666;
     --color-border: #eee;
+    --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.2);
+    --transition-speed: 0.3s;
 }
 
 /* Reset et styles de base */
@@ -18,17 +22,68 @@
 body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    background: #f0f0f0;
+    background: #f8f9fa;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+/* Header transparent */
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 999;
+}
+
+/* Container for spacing */
+.header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Logo */
+.logo img {
+    height: 120px;
+    max-height: 70px;
+    object-fit: contain;
+}
+
+/* Navigation */
+.nav {
+    display: flex;
+    gap: 30px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #222;
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.nav a:hover {
+    color: var(--hover-color);
+}
+
+/* Ajustement pour le contenu principal à cause du header fixed */
+main {
+    margin-top: 100px;
+    flex: 1;
+}
 
 /* Hero Section */
 .hero {
-    height: 60vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    height: 70vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
                 url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3') center/cover;
     display: flex;
     align-items: center;
@@ -36,86 +91,217 @@ body {
     text-align: center;
     color: var(--color-light);
     margin-top: -100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background: linear-gradient(to top, #f8f9fa, transparent);
 }
 
 .hero-content {
     padding: 2rem;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 1s ease-out;
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: -1px;
 }
 
 .hero p {
-    font-size: 1.2rem;
-    color: var(--color-secondary);
+    font-size: 1.4rem;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 /* Sections communes */
 section {
-    padding: 6rem 3rem;
+    padding: 8rem 3rem;
+    position: relative;
 }
 
 .section-title {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 5rem;
 }
 
 .section-title h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--color-primary);
-    position: relative;
-    display: inline-block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
 }
 
+.section-title .subtitle {
+    font-size: 1.2rem;
+    color: var(--color-gray);
+    max-width: 600px;
+    margin: 0 auto;
+}
 
 /* Grille des capteurs */
 .sensors-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .sensor-card {
-    background: white;
-    border-radius: 10px;
-    padding: 2rem;
+    background: var(--color-light);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    border: none;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.sensor-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform var(--transition-speed) ease;
 }
 
 .sensor-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.sensor-card:hover::before {
+    transform: scaleX(1);
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
 }
 
 .sensor-card i {
-    font-size: 2.5rem;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    font-size: 3rem;
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     margin-bottom: 1.5rem;
+    display: inline-block;
+    transition: transform var(--transition-speed) ease;
+}
+
+.sensor-card:hover i {
+    transform: scale(1.1);
 }
 
 .sensor-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     margin-bottom: 1rem;
     color: var(--color-dark);
+    font-weight: 600;
 }
 
 .sensor-card p {
     color: var(--color-gray);
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: var(--color-light);
+    padding: 80px 24px 40px;
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.footer-section h4 {
+    color: var(--color-dark);
+    margin-bottom: 24px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding-left: 0;
+    text-align: left;
+}
+
+.footer-section ul li {
+    margin-bottom: 12px;
+}
+
+.footer-section ul a {
+    color: var(--color-gray);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 14px;
+    display: block;
+}
+
+.footer-section ul a:hover {
+    color: var(--color-primary);
+}
+
+.copyright {
+    text-align: left;
+    color: var(--color-gray);
+    font-size: 14px;
+    padding-top: 40px;
+    border-top: 1px solid var(--color-border);
+}
 
 /* Media Queries */
 @media (max-width: 768px) {
@@ -133,11 +319,23 @@ section {
     }
 
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
     }
 
     section {
-        padding: 4rem 1.5rem;
+        padding: 6rem 2rem;
+    }
+
+    .section-title h2 {
+        font-size: 2rem;
+    }
+
+    .sensors-grid {
+        gap: 2rem;
     }
 
     .footer-nav {
@@ -147,7 +345,19 @@ section {
 
 @media (max-width: 480px) {
     .hero h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    .section-title h2 {
+        font-size: 1.75rem;
+    }
+
+    .sensor-card {
+        padding: 2rem 1.5rem;
     }
 
     .nav a {
