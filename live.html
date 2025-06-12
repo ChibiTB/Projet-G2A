@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Capteurs en direct – DBreeze</title>
+  <link rel="stylesheet" href="Vue/live.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <section class="container">
+      <canvas id="graphTempHum"></canvas>
+    </section>
+
+    <section class="container">
+      <canvas id="graphSonore"></canvas>
+    </section>
+
+    <section class="container">
+      <canvas id="graphDistance"></canvas>
+    </section>
+
+    <section class="container">
+      <canvas id="graphLuminosite"></canvas>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    async function includeHTML(selector, url) {
+      const el = document.querySelector(selector);
+      const resp = await fetch(url);
+      el.innerHTML = await resp.text();
+      if (selector === "#header-placeholder") {
+        setTimeout(() => {
+          const header = el.querySelector('.header');
+          const main = document.getElementById('main-content');
+          if (header && main) {
+            main.style.paddingTop = (header.offsetHeight + 20) + 'px';
+          }
+        }, 100);
+      }
+      if (selector === "#footer-placeholder") {
+        setTimeout(() => {
+          const footer = el.querySelector('footer');
+          const main = document.getElementById('main-content');
+          if (footer && main) {
+            main.style.paddingBottom = '20px';
+          }
+        }, 100);
+      }
+    }
+    includeHTML("#header-placeholder", "header.html");
+    includeHTML("#footer-placeholder", "footer.html");
+  </script>
+
+  <script src="dashboard.js"></script>
+
+</body>
+</html>
