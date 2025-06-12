@@ -192,4 +192,4 @@ const chartTempHum = new Chart(document.getElementById('graphTempHum').getContex
   }
   
   updateAll();
-  setInterval(updateAll, 3000);
+  setInterval(updateAll, 500);
