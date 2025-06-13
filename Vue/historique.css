@@ -38,3 +38,18 @@
     background-color: #f3f3f3;
   }
   
+/* Formulaire de filtre */
+#filtre-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#filtre-form label {
+    font-weight: bold;
+}
+
+#filtre-form input[type="date"] {
+    padding: 5px;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Historique température – DBreeze</title>
+  <link rel="stylesheet" href="Vue/style.css">
+  <link rel="stylesheet" href="Vue/historique.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main class="historique">
+    <div class="container">
+      <h2>Historique température</h2>
+      <p>Sélectionnez une période pour consulter les relevés de température.</p>
+
+      <form id="filtre-form">
+        <label for="start-date">Du :</label>
+        <input type="date" id="start-date" name="start" required>
+        <label for="end-date">au :</label>
+        <input type="date" id="end-date" name="end" required>
+        <button type="submit" class="btn">Filtrer</button>
+      </form>
+
+      <table class="historique-table" id="historique-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Température max (°C)</th>
+            <th>Température min (°C)</th>
+          </tr>
+        </thead>
+        <tbody id="historique-body">
+          <tr data-date="2025-06-10">
+            <td>2025-06-10</td>
+            <td>28.5</td>
+            <td>21.1</td>
+          </tr>
+          <tr data-date="2025-06-09">
+            <td>2025-06-09</td>
+            <td>27.8</td>
+            <td>20.0</td>
+          </tr>
+          <tr data-date="2025-06-08">
+            <td>2025-06-08</td>
+            <td>30.0</td>
+            <td>22.5</td>
+          </tr>
+          <tr data-date="2025-06-07">
+            <td>2025-06-07</td>
+            <td>26.2</td>
+            <td>19.9</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    async function includeHTML(selector, url) {
+      const element = document.querySelector(selector);
+      const response = await fetch(url);
+      element.innerHTML = await response.text();
+    }
+    includeHTML("#header-placeholder", "header.html");
+    includeHTML("#footer-placeholder", "footer.html");
+
+    const form = document.getElementById('filtre-form');
+    const tbody = document.getElementById('historique-body');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const start = new Date(document.getElementById('start-date').value);
+      const end = new Date(document.getElementById('end-date').value);
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.forEach(row => {
+        const date = new Date(row.dataset.date);
+        row.style.display = (date >= start && date <= end) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
