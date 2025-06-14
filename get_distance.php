@@ -10,9 +10,9 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->prepare("SELECT id_objet, date_mesure, valeur_mesure FROM mesures ORDER BY date_mesure ASC LIMIT 200");
+    $stmt = $pdo->prepare("SELECT id_objet, date_mesure, valeur_mesure FROM mesures ORDER BY date_mesure DESC LIMIT 500");
     $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $rows = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
 
     $grouped = [];
 
