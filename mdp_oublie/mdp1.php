@@ -80,10 +80,9 @@
         <h1>Mot de Passe Oublié</h1>
         <p>Veuillez entrer votre adresse e-mail pour recevoir un lien de réinitialisation.</p>
         <?php
+        require __DIR__ . '/../vendor/autoload.php';
         use PHPMailer\PHPMailer\PHPMailer;
         use PHPMailer\PHPMailer\Exception;
-
-        require '../vendor/autoload.php';
 
 
         $host = '144.76.54.100';
@@ -100,13 +99,13 @@
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
             $email = $conn->real_escape_string($_POST['email']);
-            $sql = "SELECT * FROM Utilisateur WHERE email='$email'";
+            $sql = "SELECT * FROM utilisateur WHERE email='$email'";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
                 $token = bin2hex(random_bytes(50));
                 $expire_time = date("Y-m-d H:i:s", strtotime('+24 hour'));
-                $sql = "UPDATE Utilisateur SET token='$token', token_expiration='$expire_time' WHERE email='$email'";
+                $sql = "UPDATE utilisateur SET token='$token', token_expiration='$expire_time' WHERE email='$email'";
                 $conn->query($sql);
 
                 // Vérifie le port MAMP
@@ -120,7 +119,7 @@
                     $mail->Host       = 'smtp.gmail.com';
                     $mail->SMTPAuth   = true;
                     $mail->Username   = 'dbreeze.g2aisep@gmail.com';
-                    $mail->Password   = 'Dbreeze1234';
+                    $mail->Password   = 'emxz uzkh qzhn iycd';
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port       = 587;
 

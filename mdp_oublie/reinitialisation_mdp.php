@@ -98,6 +98,7 @@
     <div class="forgot-password-container">
         <h1>Nouveau Mot de Passe</h1>
         <?php
+        require __DIR__ . '/../vendor/autoload.php';
         $host = '144.76.54.100';
         $dbname = 'G2';
         $user = 'G2';
@@ -197,4 +198,3 @@
     </script>
 </body>
 </html>
-
