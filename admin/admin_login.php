@@ -32,14 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Connexion Admin</title>
+    <link rel="stylesheet" href="css/admin_login.css">
 </head>
 <body>
-    <h1>Connexion Admin</h1>
-    <?php if (!empty($error)) echo "<p style='color: red;'>$error</p>"; ?>
-    <form method="post">
-        <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-        <input type="password" name="password" placeholder="Mot de passe" required>
-        <button type="submit">Se connecter</button>
-    </form>
+    <div class="login-container">
+        <h1>Connexion Admin</h1>
+        <?php if (!empty($error)) echo "<div class='error-message'>" . htmlspecialchars($error) . "</div>"; ?>
+        <form method="post">
+            <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+    </div>
 </body>
 </html>
