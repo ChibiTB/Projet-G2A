@@ -13,4 +13,14 @@ function getPDO() {
         die("Erreur de connexion : " . $e->getMessage());
     }
 }
+
+function getSMTPConfig() {
+    return [
+        'host' => 'smtp.gmail.com',
+        'username' => 'dbreeze.g2aisep@gmail.com',
+        'password' => 'emxz uzkh qzhn iycd',
+        'port' => 587,
+        'encryption' => 'tls'
+    ];
+}
 ?>

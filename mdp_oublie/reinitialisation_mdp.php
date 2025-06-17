@@ -99,15 +99,9 @@
         <h1>Nouveau Mot de Passe</h1>
         <?php
         require __DIR__ . '/../vendor/autoload.php';
-        $host = '144.76.54.100';
-        $dbname = 'G2';
-        $user = 'G2';
-        $pass = 'APPG2-BDD';
+        require_once __DIR__ . '/../database.php';
 
-        $conn = new mysqli($host, $user, $pass, $dbname);
-        if ($conn->connect_error) {
-            die("Échec de la connexion : " . $conn->connect_error);
-        }
+        $pdo = getPDO();
 
         $message = "";
 
@@ -116,14 +110,17 @@
             $password = $_POST['password'] ?? '';
             $confirmPassword = $_POST['confirm-password'] ?? '';
 
-            if ($password === $confirmPassword) {
-                $sql = "SELECT * FROM Utilisateur WHERE token='$token' AND token_expiration > NOW()";
-                $result = $conn->query($sql);
+            if (!preg_match('/^[A-Fa-f0-9]{100}$/', $token)) {
+                $message = "Lien invalide.";
+            } elseif ($password === $confirmPassword) {
+                $stmt = $pdo->prepare("SELECT * FROM Utilisateur WHERE token = ? AND token_expiration > NOW()");
+                $stmt->execute([$token]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if ($result->num_rows > 0) {
+                if ($user) {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    $sql = "UPDATE Utilisateur SET mot_de_passe='$hashedPassword', token=NULL, token_expiration=NULL WHERE token='$token'";
-                    if ($conn->query($sql) === TRUE) {
+                    $update = $pdo->prepare("UPDATE Utilisateur SET mot_de_passe = ?, token=NULL, token_expiration=NULL WHERE token = ?");
+                    if ($update->execute([$hashedPassword, $token])) {
                         $message = "Mot de passe modifié avec succès. Vous pouvez maintenant vous connecter.";
                     } else {
                         $message = "Erreur lors de la mise à jour du mot de passe.";
@@ -136,7 +133,7 @@
             }
         }
 
-        $conn->close();
+        $pdo = null;
         ?>
         <form method="POST">
             <input type="password" id="password" name="password" placeholder="Nouveau mot de passe" required>
