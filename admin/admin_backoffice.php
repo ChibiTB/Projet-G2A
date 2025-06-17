@@ -2,7 +2,9 @@
 session_start();
 require 'controllers/ContentEditorController.php';
 require 'models/ContentEditorModel.php';
-require 'database';
+require 'database/db_conn.php';
+
+$conn = getPDO();
 
 $model = new ContentEditorModel($conn);
 $controller = new ContentEditorController($model);
