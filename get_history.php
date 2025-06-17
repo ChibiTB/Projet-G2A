@@ -3,17 +3,31 @@ header('Content-Type: application/json');
 require_once 'database.php';
 $pdo = getPDO();
 
+$start = $_GET['start'] ?? date('Y-m-d', strtotime('-6 days'));
+$end = $_GET['end'] ?? date('Y-m-d');
+$capteurs = isset($_GET['capteurs']) && $_GET['capteurs'] !== ''
+    ? array_map('intval', explode(',', $_GET['capteurs']))
+    : [];
+
+$where = 'date_mesure BETWEEN ? AND ?';
+$params = ["$start 00:00:00", "$end 23:59:59"];
+if (!empty($capteurs)) {
+    $placeholders = implode(',', array_fill(0, count($capteurs), '?'));
+    $where .= " AND id_objet IN ($placeholders)";
+    $params = array_merge($params, $capteurs);
+}
+
 try {
     $sql = "SELECT id_objet, DATE(date_mesure) AS jour,
-    MAX(valeur_mesure) AS max_valeur,
-    MIN(valeur_mesure) AS min_valeur,
-    AVG(valeur_mesure) AS avg_valeur
+                    MAX(valeur_mesure) AS max_valeur,
+                    MIN(valeur_mesure) AS min_valeur,
+                    AVG(valeur_mesure) AS avg_valeur
             FROM mesures
-            WHERE date_mesure >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+            WHERE $where
             GROUP BY id_objet, jour
             ORDER BY jour DESC, id_objet";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    $stmt->execute($params);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $names = [

@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
     <meta charset="UTF-8">
     <title>Historique des capteurs</title>
     <link rel="stylesheet" href="Vue/style.css">
@@ -14,11 +13,25 @@
 
     <main class="historique" id="main-content">
     <div class="container">
-        <h2>Historique des capteurs (7 derniers jours)</h2>
+        <h2>Historique des capteurs</h2>
+
+        <form id="filter-form" class="filters">
+        <label>Du <input type="date" id="date-start"></label>
+        <label>au <input type="date" id="date-end"></label>
+        <div class="capteurs">
+            <label><input type="checkbox" class="capteur" value="1" checked> Température</label>
+            <label><input type="checkbox" class="capteur" value="2" checked> Humidité</label>
+            <label><input type="checkbox" class="capteur" value="3" checked> Luminosité</label>
+            <label><input type="checkbox" class="capteur" value="4" checked> Distance</label>
+            <label><input type="checkbox" class="capteur" value="5" checked> Sonore</label>
+        </div>
+        <button type="submit">Appliquer</button>
+        </form>
+
         <table id="history-table" class="historique-table">
         <thead>
             <tr>
-            <th>Date</th>a
+            <th>Date</th>
             <th>Capteur</th>
             <th>Min</th>
             <th>Max</th>
@@ -55,9 +68,24 @@
     includeHTML('#header-placeholder','header.html');
     includeHTML('#footer-placeholder','footer.html');
 
+    function defaultDates() {
+        const end = new Date();
+        const start = new Date();
+        start.setDate(end.getDate() - 6);
+        document.getElementById('date-start').value = start.toISOString().split('T')[0];
+        document.getElementById('date-end').value = end.toISOString().split('T')[0];
+    }
+
     async function loadHistory() {
         try {
-        const res = await fetch('get_history.php');
+        const params = new URLSearchParams();
+        const dStart = document.getElementById('date-start').value;
+        const dEnd = document.getElementById('date-end').value;
+        if (dStart) params.set('start', dStart);
+        if (dEnd) params.set('end', dEnd);
+        const caps = Array.from(document.querySelectorAll('.capteur:checked')).map(c => c.value);
+        if (caps.length) params.set('capteurs', caps.join(','));
+        const res = await fetch('get_history.php?' + params.toString());
         const data = await res.json();
         const tbody = document.querySelector('#history-table tbody');
         tbody.innerHTML = '';
@@ -70,6 +98,11 @@
         console.error('Erreur chargement historique', err);
         }
     }
+    defaultDates();
+    document.getElementById('filter-form').addEventListener('submit', e => {
+        e.preventDefault();
+        loadHistory();
+    });
     loadHistory();
     </script>
 </body>
