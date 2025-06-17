@@ -1,6 +1,9 @@
 <?php
-// Inclure la connexion PDO
+// Inclure la fonction de connexion PDO
 require("database.php");
+
+// Récupérer l'instance PDO
+$pdo = getPDO(); // 🔧 C'était ça qui manquait
 
 // Lire les données POST
 $id_objet = isset($_POST['id_objet']) ? (int)$_POST['id_objet'] : 0;

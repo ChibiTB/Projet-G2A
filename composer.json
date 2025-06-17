@@ -1,0 +1,17 @@
+{
+    "name": "romane/projet-g2a",
+    "autoload": {
+        "psr-4": {
+            "Romane\\ProjetG2a\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Romane Sotiras",
+            "email": "romane.sotiras20@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.10"
+    }
+}

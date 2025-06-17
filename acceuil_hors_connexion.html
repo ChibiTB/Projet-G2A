@@ -35,30 +35,6 @@
         </div>
     </section>
 
-    <section class="events" id="events">
-        <div class="events-header">
-            <h2>ÉVÉNEMENTS À LA UNE</h2>
-            <a href="tous-les-events.php" class="btn-voir-plus">Voir plus</a>
-        </div>
-        <div class="events-grid">
-            <!-- Exemple statique à la place de la boucle PHP -->
-            <a href="connexion.php">
-                <img src="image/exemple-event.jpg" alt="Événement Exemple" class="event-image">
-                <div class="event-content">
-                    <h3 class="event-title">Nom de l'Événement</h3>
-                    <p class="event-venue">Adresse de l'événement</p>
-                    <div class="event-details">
-                        <span>Sam 15 Juin | 21:00</span>
-                        <span>25,00€</span>
-                    </div>
-                    <div class="event-tags">
-                        <span class="tag">Concert</span>
-                    </div>
-                </div>
-            </a>
-            <p>Aucun événement disponible.</p>
-        </div>
-    </section>
 
     <div id="cookie-popup" class="cookie-popup">
         <p>Nous utilisons des cookies pour améliorer votre expérience sur notre site. En utilisant notre site, vous acceptez les cookies.</p>
@@ -102,13 +78,16 @@
         </div>
     </footer>
 
-    <script>
-        document.getElementById('learn-more').addEventListener('click', function(e) {
-            e.preventDefault();
-            const eventsSection = document.getElementById('events');
-            eventsSection.scrollIntoView({ behavior: 'smooth' });
-        });
-    </script>
-    <script src="script/cookies.js"></script>
+    <!-- Script interne : Smooth scroll -->
+<script>
+    document.getElementById('learn-more').addEventListener('click', function(e) {
+        e.preventDefault();
+        const eventsSection = document.getElementById('events');
+        eventsSection.scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
+<!-- Script externe : cookies -->
+<script src="cookies.js"></script>
 </body>
 </html>

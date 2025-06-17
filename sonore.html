@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Capteur Sonore – DBreeze</title>
+  <link rel="stylesheet" href="Vue/style.css" />
+  <link rel="stylesheet" href="Vue/sonore.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <main id="main-content" class="main-capteurs">
+    <div class="containers">
+      <h2>Niveau Sonore – Suivi en temps réel</h2>
+      <canvas id="graphiqueCapteurs"></canvas>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    async function includeHTML(selector, url) {
+      const element = document.querySelector(selector);
+      const response = await fetch(url);
+      element.innerHTML = await response.text();
+
+      if (selector === "#header-placeholder") {
+        setTimeout(() => {
+          const header = element.querySelector('.header');
+          const main = document.getElementById('main-content');
+          if (header && main) {
+            const height = header.offsetHeight;
+            main.style.paddingTop = `${height + 20}px`;
+          }
+        }, 100);
+      }
+
+      if (selector === "#footer-placeholder") {
+        setTimeout(() => {
+          const footer = element.querySelector('footer');
+          const main = document.getElementById('main-content');
+          if (footer && main) {
+            const height = footer.offsetHeight;
+            main.style.paddingBottom = `20px`;
+          }
+        }, 100);
+      }
+    }
+
+    includeHTML("#header-placeholder", "header.html");
+    includeHTML("#footer-placeholder", "footer.html");
+
+    const ctx = document.getElementById('graphiqueCapteurs').getContext('2d');
+
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Niveau Sonore (dB)',
+            data: [],
+            borderColor: 'rgba(217, 2, 250, 1)',
+            backgroundColor: 'rgba(217, 2, 250, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: 'Niveau Sonore (dB)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Heure'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top'
+          },
+          title: {
+            display: true,
+            text: 'Évolution en temps réel du niveau sonore'
+          }
+        }
+      }
+    });
+
+    async function fetchDataAndUpdateChart() {
+      try {
+        const response = await fetch('get_sonore.php');
+        const data = await response.json();
+
+        // Filtrer uniquement les enregistrements avec niveau sonore présente
+        const filtered = data.filter(entry => entry.sonore !== undefined);
+
+        // Extraire les labels (heures) et valeurs
+        const labels = filtered.map(entry => {
+          const d = new Date(entry.date);
+          return d.toLocaleTimeString('fr-FR', { hour12: false });
+        });
+        const sonoreData = filtered.map(entry => entry.sonore);
+
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = sonoreData;
+        chart.update();
+      } catch (error) {
+        console.error('Erreur lors du chargement des données :', error);
+      }
+    }
+
+    // Chargement initial + mise à jour toutes les 3 secondes
+    fetchDataAndUpdateChart();
+    setInterval(fetchDataAndUpdateChart, 100);
+  </script>
+
+</body>
+</html>
