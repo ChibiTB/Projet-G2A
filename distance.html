@@ -1,130 +1,141 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Capteur de Distance – DBreeze</title>
-  <link rel="stylesheet" href="Vue/style.css" />
-  <link rel="stylesheet" href="Vue/distance.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capteur Distance - DBreeze</title>
+    <link rel="stylesheet" href="Vue/style.css">
+    <link rel="stylesheet" href="Vue/live.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <div id="header-placeholder"></div>
 
-  <div id="header-placeholder"></div>
+    <main class="live-page" id="main-content">
+        <div class="container">
+            <h2>📏 Capteur de Distance</h2>
+            
+            <div class="sensor-info">
+                <div class="current-value">
+                    <h3>Distance Actuelle</h3>
+                    <div class="value-display">
+                        <span id="current-distance">-- cm</span>
+                    </div>
+                    <div class="last-update">
+                        Dernière mise à jour: <span id="last-update">--</span>
+                    </div>
+                </div>
+            </div>
 
-  <main id="main-content" class="main-capteurs">
-    <div class="containers">
-      <h2>Distance – Suivi en temps réel</h2>
-      <canvas id="graphiqueCapteurs"></canvas>
-    </div>
-  </main>
+            <div class="chart-container">
+                <canvas id="distanceChart"></canvas>
+            </div>
 
-  <div id="footer-placeholder"></div>
+            <div class="controls">
+                <button id="refresh-btn" class="btn-primary">Actualiser</button>
+                <button id="export-btn" class="btn-secondary">Exporter</button>
+            </div>
+        </div>
+    </main>
 
-  <script>
-    async function includeHTML(selector, url) {
-      const element = document.querySelector(selector);
-      const response = await fetch(url);
-      element.innerHTML = await response.text();
+    <div id="footer-placeholder"></div>
 
-      if (selector === "#header-placeholder") {
-        setTimeout(() => {
-          const header = element.querySelector('.header');
-          const main = document.getElementById('main-content');
-          if (header && main) {
-            const height = header.offsetHeight;
-            main.style.paddingTop = `${height + 20}px`;
-          }
-        }, 100);
-      }
-
-      if (selector === "#footer-placeholder") {
-        setTimeout(() => {
-          const footer = element.querySelector('footer');
-          const main = document.getElementById('main-content');
-          if (footer && main) {
-            const height = footer.offsetHeight;
-            main.style.paddingBottom = `20px`;
-          }
-        }, 100);
-      }
-    }
-
-    includeHTML("#header-placeholder", "header.html");
-    includeHTML("#footer-placeholder", "footer.html");
-
-    const ctx = document.getElementById('graphiqueCapteurs').getContext('2d');
-
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [
-          {
-            label: 'Distance (cm)',
-            data: [],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.1)',
-            tension: 0.3,
-            fill: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: false,
-            title: {
-              display: true,
-              text: 'Distance (cm)'
+    <script>
+        // Include header and footer
+        async function includeHTML(selector, url) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                document.querySelector(selector).innerHTML = html;
+            } catch (error) {
+                console.error('Error loading:', url, error);
             }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Heure'
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            position: 'top'
-          },
-          title: {
-            display: true,
-            text: 'Évolution en temps réel de la distance'
-          }
         }
-      }
-    });
 
-    async function fetchDataAndUpdateChart() {
-      try {
-        const response = await fetch('get_distance.php');
-        const data = await response.json();
+        includeHTML('#header-placeholder', 'header.html');
+        includeHTML('#footer-placeholder', 'footer.html');
 
-        // Filtrer uniquement les enregistrements avec distance présente
-        const filtered = data.filter(entry => entry.distance !== undefined);
-
-        // Extraire les labels (heures) et valeurs
-        const labels = filtered.map(entry => {
-          const d = new Date(entry.date);
-          return d.toLocaleTimeString('fr-FR', { hour12: false });
+        // Initialize chart
+        const ctx = document.getElementById('distanceChart').getContext('2d');
+        const distanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Distance (cm)',
+                    data: [],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Distance (cm)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Heure'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Évolution de la Distance'
+                    }
+                }
+            }
         });
-        const distanceData = filtered.map(entry => entry.distance);
 
-        chart.data.labels = labels;
-        chart.data.datasets[0].data = distanceData;
-        chart.update();
-      } catch (error) {
-        console.error('Erreur lors du chargement des données :', error);
-      }
-    }
+        // Update distance data
+        async function updateDistance() {
+            try {
+                const response = await fetch('get_distance.php');
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    const latest = data[data.length - 1];
+                    document.getElementById('current-distance').textContent = latest.distance + ' cm';
+                    document.getElementById('last-update').textContent = new Date(latest.date).toLocaleString('fr-FR');
+                    
+                    // Update chart
+                    distanceChart.data.labels = data.map(item => 
+                        new Date(item.date).toLocaleTimeString('fr-FR', { hour12: false })
+                    );
+                    distanceChart.data.datasets[0].data = data.map(item => item.distance);
+                    distanceChart.update();
+                }
+            } catch (error) {
+                console.error('Error updating distance:', error);
+                document.getElementById('current-distance').textContent = 'Erreur';
+            }
+        }
 
-    // Chargement initial + mise à jour toutes les 3 secondes
-    fetchDataAndUpdateChart();
-    setInterval(fetchDataAndUpdateChart, 100);
-  </script>
+        // Event listeners
+        document.getElementById('refresh-btn').addEventListener('click', updateDistance);
+        
+        document.getElementById('export-btn').addEventListener('click', function() {
+            // Simple export functionality
+            const canvas = document.getElementById('distanceChart');
+            const url = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'distance_chart.png';
+            a.click();
+        });
 
+        // Initial load and auto-refresh
+        updateDistance();
+        setInterval(updateDistance, 5000); // Update every 5 seconds
+    </script>
 </body>
 </html>

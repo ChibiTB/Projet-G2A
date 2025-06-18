@@ -1,41 +1,64 @@
 <?php
-header('Content-Type: application/json');
+require_once 'database.php';
 
-$host = '144.76.54.100';
-$dbname = 'G2';
-$user = 'G2';
-$pass = 'APPG2-BDD';
+// Simple caching mechanism
+function getCachedData($cacheKey, $ttl = 60) {
+    $cacheFile = sys_get_temp_dir() . '/dbreeze_cache_' . md5($cacheKey) . '.json';
+    
+    if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $ttl)) {
+        return json_decode(file_get_contents($cacheFile), true);
+    }
+    
+    return null;
+}
+
+function saveCache($cacheKey, $data) {
+    $cacheFile = sys_get_temp_dir() . '/dbreeze_cache_' . md5($cacheKey) . '.json';
+    file_put_contents($cacheFile, json_encode($data));
+}
+
+// Get parameters with defaults
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 50;
+$limit = min(max($limit, 1), 500); // Ensure limit is between 1 and 500
+
+// Generate cache key based on parameters
+$cacheKey = "measures_" . $limit;
+
+// Try to get cached data
+$cachedData = getCachedData($cacheKey, 30); // 30 seconds TTL
+if ($cachedData !== null) {
+    header('Content-Type: application/json');
+    echo json_encode($cachedData);
+    exit;
+}
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $stmt = $pdo->prepare("SELECT id_objet, date_mesure, valeur_mesure FROM mesures ORDER BY date_mesure DESC LIMIT 500");
-    $stmt->execute();
-    $rows = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
+    $pdo = getPDO();
     
-
-    $grouped = [];
-
-    foreach ($rows as $row) {
-        $date = $row['date_mesure'];
-        $valeur = floatval($row['valeur_mesure']);
-        $id_objet = $row['id_objet'];
-
-        if (!isset($grouped[$date])) {
-            $grouped[$date] = ['date' => $date];
-        }
-
-        if ($id_objet == 1) {
-            $grouped[$date]['temperature'] = $valeur;
-        } elseif ($id_objet == 2) {
-            $grouped[$date]['humidite'] = $valeur;
-        }
-    }
-
-    echo json_encode(array_values($grouped), JSON_UNESCAPED_UNICODE);
-
+    // Use prepared statement with parameter binding
+    $stmt = $pdo->prepare("
+        SELECT 
+            date_mesure as date, 
+            temperature, 
+            humidite 
+        FROM mesure_temp_hum 
+        ORDER BY date_mesure DESC 
+        LIMIT :limit
+    ");
+    
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Save to cache
+    saveCache($cacheKey, $results);
+    
+    header('Content-Type: application/json');
+    echo json_encode($results);
 } catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]);
+    header('HTTP/1.1 500 Internal Server Error');
+    echo json_encode(['error' => 'Database error']);
+    error_log("Database error in get_measures.php: " . $e->getMessage());
 }
+?>
