@@ -251,6 +251,159 @@ main.historique {
 }
 
 /* Chart view styling */
+/* Chart improvements */
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin: 20px 0;
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+}
+
+/* Loading and error states */
+.loading,
+.error {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}
+
+.loading {
+    color: #666;
+}
+
+.error {
+    color: #e74c3c;
+    background-color: #fdf2f2;
+}
+
+/* Improved view toggle buttons */
+.view-toggle {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+.view-toggle button {
+    padding: 10px 20px;
+    border: 2px solid #3498db;
+    background: white;
+    color: #3498db;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.view-toggle button:hover {
+    background: #ecf0f1;
+}
+
+.view-toggle button.active {
+    background: #3498db;
+    color: white;
+}
+
+/* Responsive chart */
+@media (max-width: 768px) {
+.chart-container {
+    height: 300px;
+    }
+
+.chart-legend {
+    flex-direction: column;
+    align-items: center;
+    } 
+}
+
+/* Enhanced filters */
+.filters {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+}
+
+.capteurs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.capteurs label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.capteurs label:hover {
+    background: #e9ecef;
+}
+
+.capteurs input[type="checkbox"]:checked + span {
+    font-weight: 600;
+}
+
+/* Stats section improvements */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.stat-card span {
+    font-size: 24px;
+    font-weight: bold;
+    display: block;
+}
+
 #chart-view {
     background-color: white;
     padding: 20px;

@@ -61,14 +61,12 @@
             </table>
         </div>
         <!-- Graph view -->
-        <div id="chart-view" class="view-container" style="display: none;">
-            <canvas id="historique-chart" height="100"></canvas>
-        </div>
-
-
         <!-- Chart view -->
         <div id="chart-view" class="view-container" style="display: none;">
-            <canvas id="history-chart"></canvas>
+            <div class="chart-container">
+                <canvas id="history-chart"></canvas>
+            </div>
+            <div class="chart-legend" id="chart-legend"></div>
         </div>
 
         <!-- Export functionality -->
@@ -135,7 +133,11 @@
     }
 
     async function loadHistory() {
-        try {
+    try {
+        // Show loading state
+        const tbody = document.querySelector('#history-table tbody');
+        tbody.innerHTML = '<tr><td colspan="5" class="loading">Chargement des données...</td></tr>';
+        
         const params = new URLSearchParams();
         const dStart = document.getElementById('date-start').value;
         const dEnd = document.getElementById('date-end').value;
@@ -143,17 +145,30 @@
         if (dEnd) params.set('end', dEnd);
         const caps = Array.from(document.querySelectorAll('.capteur:checked')).map(c => c.value);
         if (caps.length) params.set('capteurs', caps.join(','));
-        const res = await fetch('get_history.php?' + params.toString());
-        const data = await res.json();
-        currentData = data;
         
-        updateTable(data);
-        updateChart(data);
-        updateStats(data);
-        } catch(err) {
-        console.error('Erreur chargement historique', err);
+        const res = await fetch('get_history.php?' + params.toString());
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
         }
+        
+        const response = await res.json();
+        
+        if (response.error) {
+            throw new Error(response.error + ': ' + response.message);
+        }
+        
+        currentData = response.data || response; // Handle both new and old format
+        
+        updateTable(currentData);
+        updateChart(currentData);
+        updateStats(currentData, response.metadata);
+        
+    } catch(err) {
+        console.error('Erreur chargement historique', err);
+        const tbody = document.querySelector('#history-table tbody');
+        tbody.innerHTML = `<tr><td colspan="5" class="error">Erreur: ${err.message}</td></tr>`;
     }
+}
 
     function updateTable(data) {
         const tbody = document.querySelector('#history-table tbody');
@@ -166,78 +181,133 @@
     }
 
     function updateChart(data) {
-        const ctx = document.getElementById('history-chart').getContext('2d');
-        
-        if (chart) {
-            chart.destroy();
+    const ctx = document.getElementById('history-chart').getContext('2d');
+    
+    if (chart) {
+        chart.destroy();
+    }
+
+    // Group data by sensor and date
+    const sensorData = {};
+    const allDates = [...new Set(data.map(row => row.jour))].sort();
+    
+    data.forEach(row => {
+        if (!sensorData[row.capteur]) {
+            sensorData[row.capteur] = {};
         }
+        sensorData[row.capteur][row.jour] = parseFloat(row.moyenne) || null;
+    });
 
-        const datasets = {};
-        data.forEach(row => {
-            if (!datasets[row.capteur]) {
-                datasets[row.capteur] = {
-                    label: row.capteur,
-                    data: [],
-                    borderColor: getColorForSensor(row.capteur),
-                    backgroundColor: getColorForSensor(row.capteur) + '20',
-                    fill: false
-                };
-            }
-            datasets[row.capteur].data.push({
-                x: row.jour,
-                y: parseFloat(row.moyenne)
-            });
-        });
+    const datasets = Object.keys(sensorData).map(sensor => {
+        const sensorValues = allDates.map(date => sensorData[sensor][date] || null);
+        
+        return {
+            label: sensor,
+            data: sensorValues,
+            borderColor: getColorForSensor(sensor),
+            backgroundColor: getColorForSensor(sensor) + '20',
+            borderWidth: 2,
+            fill: false,
+            tension: 0.1,
+            spanGaps: true,
+            pointRadius: 4,
+            pointHoverRadius: 6
+        };
+    });
 
-        chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: Object.values(datasets)
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            parser: 'YYYY-MM-DD',
-                            displayFormats: {
-                                day: 'DD/MM'
-                            }
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: allDates,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Évolution des mesures des capteurs',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed.y;
+                            if (value === null) return context.dataset.label + ': Pas de données';
+                            return context.dataset.label + ': ' + value.toFixed(2);
                         }
-                    },
-                    y: {
-                        beginAtZero: true
                     }
                 }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Valeur'
+                    },
+                    beginAtZero: true
+                }
+            },
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
             }
-        });
-    }
+        }
+    });
+}
 
     function getColorForSensor(sensor) {
         const colors = {
-            'Température': '#ff6384',
-            'Humidité': '#36a2eb',
-            'Luminosité': '#ffce56',
-            'Distance': '#4bc0c0',
-            'Sonore': '#9966ff'
+            'Température': '#e74c3c',
+            'Humidité': '#3498db',
+            'Luminosité': '#f39c12',
+            'Distance': '#2ecc71',
+            'Sonore': '#9b59b6'
         };
-        return colors[sensor] || '#999999';
+        return colors[sensor] || '#95a5a6';
     }
 
-    function updateStats(data) {
-        document.getElementById('total-records').textContent = data.length;
-        document.getElementById('active-sensors').textContent = new Set(data.map(row => row.capteur)).size;
-        
-        if (data.length > 0) {
-            const dates = data.map(row => new Date(row.jour));
-            const minDate = new Date(Math.min(...dates));
-            const maxDate = new Date(Math.max(...dates));
-            const diffTime = Math.abs(maxDate - minDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            document.getElementById('period-analyzed').textContent = `${diffDays} jour(s)`;
-        }
+    function updateStats(data, metadata) {
+    const totalRecords = data.filter(row => row.moyenne !== null).length;
+    document.getElementById('total-records').textContent = totalRecords;
+    
+    const activeSensors = new Set(data.filter(row => row.moyenne !== null).map(row => row.capteur)).size;
+    document.getElementById('active-sensors').textContent = activeSensors;
+    
+    if (metadata) {
+        const startDate = new Date(metadata.start_date);
+        const endDate = new Date(metadata.end_date);
+        const diffTime = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        document.getElementById('period-analyzed').textContent = `${diffDays} jour(s)`;
+    } else if (data.length > 0) {
+        const dates = data.map(row => new Date(row.jour));
+        const minDate = new Date(Math.min(...dates));
+        const maxDate = new Date(Math.max(...dates));
+        const diffTime = Math.abs(maxDate - minDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        document.getElementById('period-analyzed').textContent = `${diffDays} jour(s)`;
     }
+}
 
     function searchTable() {
         const searchTerm = document.getElementById('search-input').value.toLowerCase();
@@ -304,4 +374,3 @@
     </script>
 </body>
 </html>
-
