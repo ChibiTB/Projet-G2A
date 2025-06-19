@@ -1,140 +1,116 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Capteurs en direct – DBreeze</title>
-  <link rel="stylesheet" href="Vue/style.css" />
-  <link rel="stylesheet" href="Vue/temphum.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>Capteur de lumière</title>
+    <link rel="stylesheet" href="Vue/style.css">
+    <link rel="stylesheet" href="Vue/luminosite.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <div id="header-placeholder"></div>
+<div id="header-placeholder"></div>
 
-  <main id="main-content" class="main-capteurs">
+<main id="main-content" class="main-capteurs">
     <div class="containers">
-      <h2>Température & Humidité – Suivi en temps réel</h2>
-      <canvas id="graphiqueCapteurs"></canvas>
+        <h2>Humidité – Suivi en temps réel</h2>
+        <canvas id="graphiqueLumiere"></canvas>
     </div>
-  </main>
+</main>
 
-  <div id="footer-placeholder"></div>
+<div id="footer-placeholder"></div>
 
-  <script>
+<script>
     async function includeHTML(selector, url) {
-      const element = document.querySelector(selector);
-      const response = await fetch(url);
-      element.innerHTML = await response.text();
-
-      if (selector === "#header-placeholder") {
-        setTimeout(() => {
-          const header = element.querySelector('.header');
-          const main = document.getElementById('main-content');
-          if (header && main) {
-            const height = header.offsetHeight;
-            main.style.paddingTop = `${height + 20}px`;
-          }
-        }, 100);
-      }
-
-      if (selector === "#footer-placeholder") {
-        setTimeout(() => {
-          const footer = element.querySelector('footer');
-          const main = document.getElementById('main-content');
-          if (footer && main) {
-            const height = footer.offsetHeight;
-            main.style.paddingBottom = `20px`;
-          }
-        }, 100);
-      }
+        const element = document.querySelector(selector);
+        const response = await fetch(url);
+        element.innerHTML = await response.text();
+        
+        if (selector === "#header-placeholder") {
+            setTimeout(() => {
+                const header = element.querySelector('.header');
+                const main = document.getElementById('main-content');
+                if (header && main) {
+                    const height = header.offsetHeight;
+                    main.style.paddingTop = `${height + 20}px`;
+                }
+            }, 100);
+        }
+        
+        if (selector === "#footer-placeholder") {
+            setTimeout(() => {
+                const footer = element.querySelector('footer');
+                const main = document.getElementById('main-content');
+                if (footer && main) {
+                    const height = footer.offsetHeight;
+                    main.style.paddingBottom = `${20}px`;
+                }
+            }, 100);
+        }
     }
-
+    
     includeHTML("#header-placeholder", "header.html");
     includeHTML("#footer-placeholder", "footer.html");
+</script>
 
-    const ctx = document.getElementById('graphiqueCapteurs').getContext('2d');
+<script>
+    const ctx = document.getElementById('graphiqueLumiere').getContext('2d');
 
     const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [
-          {
-            label: 'Température (°C)',
-            data: [],
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.1)',
-            tension: 0.3,
-            fill: true
-          },
-          {
-            label: 'Humidité (%)',
-            data: [],
-            borderColor: 'rgba(54, 162, 235, 1)',
-            backgroundColor: 'rgba(54, 162, 235, 0.1)',
-            tension: 0.3,
-            fill: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: false,
-            title: {
-              display: true,
-              text: 'Valeur'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Heure'
-            }
-          }
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Humidité (%)',
+                data: [],
+                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
         },
-        plugins: {
-          legend: {
-            position: 'top'
-          },
-          title: {
-            display: true,
-            text: 'Évolution en temps réel des capteurs'
-          }
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    title: {
+                        display: true,
+                        text: 'Humidité (%)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Heure'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Évolution du nombre de personnes'
+                }
+            }
         }
-      }
     });
 
-    async function fetchDataAndUpdateChart() {
-      try {
+    async function updateGraph() {
         const response = await fetch('get_measures.php');
         const data = await response.json();
 
-        // Filtrer uniquement les enregistrements avec température ET humidité présentes
-        const filtered = data.filter(entry => entry.temperature !== undefined && entry.humidite !== undefined);
-
-        // Extraire les labels (heures) et valeurs
-        const labels = filtered.map(entry => {
-          const d = new Date(entry.date);
-          return d.toLocaleTimeString('fr-FR', { hour12: false });
-        });
-        const tempData = filtered.map(entry => entry.temperature);
-        const humData = filtered.map(entry => entry.humidite);
+        const labels = data.map(point => point.date_mesure);
+        const valeurs = data.map(point => point.valeur_mesure);
 
         chart.data.labels = labels;
-        chart.data.datasets[0].data = tempData;
-        chart.data.datasets[1].data = humData;
+        chart.data.datasets[0].data = valeurs;
         chart.update();
-      } catch (error) {
-        console.error('Erreur lors du chargement des données :', error);
-      }
     }
 
-    // Chargement initial + mise à jour toutes les 3 secondes
-    fetchDataAndUpdateChart();
-    setInterval(fetchDataAndUpdateChart, 100);
-  </script>
+    updateGraph();
+    setInterval(updateGraph, 100); 
+</script>
 
 </body>
 </html>
