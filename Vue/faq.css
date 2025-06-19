@@ -1,0 +1,98 @@
+:root {
+    --color-primary: #8e2de2;
+    --color-secondary: #f27121;
+    --color-dark: #232323;
+    --color-light: #fff;
+    --color-gray: #666;
+    --color-border: #eaeaea;
+    --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    --transition: 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background: #f8f9fa;
+    color: var(--color-dark);
+}
+
+.header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 80px;
+    background-color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    z-index: 999;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.header-buttons .btn {
+    margin-left: 16px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+}
+
+.btn-outline {
+    border: 1px solid var(--color-dark);
+    color: var(--color-dark);
+    background: transparent;
+}
+
+main.faq-section {
+    padding: 140px 24px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-title {
+    font-size: 2.8rem;
+    text-align: center;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 60px;
+}
+
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.faq-item {
+    background: var(--color-light);
+    border-left: 5px solid var(--color-primary);
+    padding: 20px 24px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.faq-item:hover {
+    box-shadow: var(--shadow-lg
