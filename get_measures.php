@@ -11,7 +11,7 @@ try {
         FROM mesures
         WHERE id_objet = 22
         ORDER BY date_mesure DESC
-        LIMIT 100
+        LIMIT 50
     ");
     $stmt->execute();
 

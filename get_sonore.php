@@ -14,7 +14,7 @@ try {
         FROM mesures
         WHERE id_objet = 5
         ORDER BY date_mesure DESC
-        LIMIT 100");
+        LIMIT 50");
     $stmt->execute();
     $rows = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
     
