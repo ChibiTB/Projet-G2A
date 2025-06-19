@@ -10,7 +10,11 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt = $pdo->prepare("SELECT id_objet, date_mesure, valeur_mesure FROM mesures ORDER BY date_mesure DESC LIMIT 500");
+    $stmt = $pdo->prepare("SELECT id_objet, date_mesure, valeur_mesure
+        FROM mesures
+        WHERE id_objet = 5
+        ORDER BY date_mesure DESC
+        LIMIT 100");
     $stmt->execute();
     $rows = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
     

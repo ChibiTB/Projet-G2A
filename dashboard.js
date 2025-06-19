@@ -74,7 +74,7 @@ const chartTempHum = new Chart(document.getElementById('graphTempHum').getContex
     data: {
       labels: [],
       datasets: [{
-        label: 'Distance (cm)',
+        label: 'Distance (m)',
         data: [],
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.1)',
@@ -85,7 +85,7 @@ const chartTempHum = new Chart(document.getElementById('graphTempHum').getContex
     options: {
       responsive: true,
       scales: {
-        y: { beginAtZero: false, title: { display: true, text: 'Distance (cm)' } },
+        y: { beginAtZero: false, title: { display: true, text: 'Distance (m)' } },
         x: { title: { display: true, text: 'Heure' } }
       },
       plugins: {
