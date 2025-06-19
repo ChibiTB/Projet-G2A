@@ -9,7 +9,7 @@ try {
     $stmt = $pdo->prepare("
         SELECT id_objet, date_mesure, valeur_mesure
         FROM mesures
-        WHERE id_objet = 22
+        WHERE id_objet = 2
         ORDER BY date_mesure DESC
         LIMIT 50
     ");
