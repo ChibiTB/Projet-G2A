@@ -35,6 +35,7 @@
       const el = document.querySelector(selector);
       const resp = await fetch(url);
       el.innerHTML = await resp.text();
+
       if (selector === "#header-placeholder") {
         setTimeout(() => {
           const header = el.querySelector('.header');
@@ -44,6 +45,7 @@
           }
         }, 100);
       }
+
       if (selector === "#footer-placeholder") {
         setTimeout(() => {
           const footer = el.querySelector('footer');
@@ -54,6 +56,7 @@
         }, 100);
       }
     }
+
     includeHTML("#header-placeholder", "header.html");
     includeHTML("#footer-placeholder", "footer.html");
   </script>
