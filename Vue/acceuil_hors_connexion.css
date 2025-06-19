@@ -366,7 +366,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 28px;
+    font-size: 72px;
     color: white;
     text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
