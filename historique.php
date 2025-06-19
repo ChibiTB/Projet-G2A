@@ -23,7 +23,6 @@
             <label>Du <input type="date" id="date-start"></label>
             <label>au <input type="date" id="date-end"></label>
             <div class="capteurs">
-                <label><input type="checkbox" class="capteur" value="1" checked> 🌡️ Température</label>
                 <label><input type="checkbox" class="capteur" value="2" checked> 💧 Humidité</label>
                 <label><input type="checkbox" class="capteur" value="3" checked> 💡 Luminosité</label>
                 <label><input type="checkbox" class="capteur" value="4" checked> 📏 Distance</label>
