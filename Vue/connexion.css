@@ -138,3 +138,13 @@
   .submit-button:hover {
   background-color: #ef8ebd;
   }
+  .form-error{
+    margin-top:16px;
+    padding:12px;
+    text-align:center;
+    color:#d93025;
+    background:#ffecec;
+    border:1px solid #ffbcbc;
+    border-radius:8px;
+    font-size:14px;
+}

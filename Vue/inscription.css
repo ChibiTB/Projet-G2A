@@ -1,65 +1,51 @@
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
+    padding: 50px 0; /* espace en haut et bas */
+    background: linear-gradient(135deg,
+        #a0b6ed,
+        #7090e1,
+        #cf8ee0,
+        #eb89aa,
+        #e78f6d,
+        #eba96f,
+        #ffcf9c);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(135deg,
-  #a0b6ed,  /* blue */
-  #7090e1,
-  #cf8ee0,  /* violet */
-  #eb89aa,  /* rose */
-  #e78f6d,  /* orange pastel */
-  #eba96f,
-  #ffcf9c
-);
-        background-size: 400% 400%;
-        animation: gradientAnimation 10s ease infinite;
-    }
+    align-items: flex-start;
+    min-height: 100vh;
+}
 
-    @keyframes gradientAnimation {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-
-/* Pour le form */
 .form-container {
-    background-color: rgba(255, 255, 255, 0.5); /* blanc à 50% de transparence */
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     width: 100%;
+    max-width: 420px;
 }
 
-/* Form header */
-h1, h2 {
-    text-align: center;
-    color: #333;
-}
-
-h1 {
-    margin-bottom: 10px;
-    font-size: 28px;
+.logo {
+    display: block;
+    margin: 0 auto 20px auto;
+    max-width: 200px;
+    height: auto;
 }
 
 h2 {
-    margin-bottom: 20px;
-    font-size: 22px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
 }
 
-/* Form groupes */
 .form-group {
     margin-bottom: 20px;
 }
@@ -75,54 +61,30 @@ input[type="text"],
 input[type="email"],
 input[type="password"] {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    color: #333;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
 }
 
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
-    border-color: #ffb3b3;
+    border-color: #eb89aa;
     outline: none;
 }
 
-/* Bouton */
-.button-inscription {
-    width: 100%;
-    padding: 10px;
-    background-color: #080808;
-    color: #ffffff;
-    font-size: 16px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    text-align: center;
-}
-
-.button-inscription:hover {
-    background-color: #ffb3b3;
-}
-
+/* Contraintes mot de passe */
 .constraint-list {
     margin: 10px 0;
-    padding: 0;
-    list-style-type: none;
+    padding-left: 0;
+    list-style: none;
     color: #333;
     font-size: 0.9em;
 }
 
-.constraint-item {
-    display: flex;
-    align-items: center;
+.constraint-list li {
     margin-bottom: 5px;
-}
-
-.constraint-item span {
-    margin-right: 5px;
-    font-weight: bold;
 }
 
 .valid {
@@ -132,9 +94,41 @@ input[type="password"]:focus {
 .invalid {
     color: red;
 }
-.logo {
-    display: block;
-    margin: 0 auto 20px auto;
-    max-width: 255px;
-    height: auto;
+
+/* Message reCAPTCHA */
+.recaptcha-message {
+    font-style: italic;
+    font-size: 0.85em;
+    margin: 15px 0;
+}
+
+/* Bouton stylisé */
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #cf8ee0, #eba96f);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(to right, #eba96f, #cf8ee0);
+}
+
+
+
+.form-error{
+    margin-top:16px;
+    background:#ffecec;
+    color:#d12a2a;
+    border:1px solid #ffbcbc;
+    padding:10px 14px;
+    border-radius:8px;
+    font-size:0.95rem;
+    text-align:center;
 }

@@ -15,10 +15,11 @@
 
             <!-- Error Message Display -->
             <?php
-            if (isset($_GET['error'])) {
-                echo '<p style="color: red; text-align: center;">' . htmlspecialchars($_GET['error']) . '</p>';
-            }
+             if (isset($_GET['error'])): ?>
+                <div class="form-error"><?php echo htmlspecialchars($_GET['error']); ?></div>
+            <?php endif; 
             ?>
+            
 
             <!-- Form Group for Username -->
             <div class="form-group">
