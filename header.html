@@ -1,8 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Header DBreeze</title>
   <link rel="stylesheet" href="Vue/header.css">
 </head>
@@ -10,102 +10,17 @@
 
 <header class="header">
   <div class="container">
-    <a href="index.html" class="logo">
+    <a href="#" class="logo">
       <img src="images/LOGOdbreeze.png" alt="Logo DBreeze">
     </a>
-    
-    <button class="mobile-menu-btn" aria-label="Menu" id="mobile-menu-toggle">
-      <span class="menu-icon"></span>
-    </button>
-    
-    <nav class="nav" id="main-nav">
-      <a href="index.html" class="nav-link">Accueil</a>
-      <a href="live.html" class="nav-link">Live</a>
-      <a href="historique.php" class="nav-link">Historique</a>
-      <div class="dropdown">
-        <a href="#" class="nav-link dropdown-toggle">Capteurs</a>
-        <div class="dropdown-menu">
-          <a href="sonore.html" class="dropdown-item">🔊 Sonore</a>
-          <a href="luminosite.html" class="dropdown-item">💡 Luminosité</a>
-          <a href="temphum.html" class="dropdown-item">🌡️ Température & Humidité</a>
-          <!-- Fixed: Added distance.html link that was missing -->
-          <a href="distance.html" class="dropdown-item">📏 Distance</a>
-        </div>
-      </div>
-      <a href="acceuil_hors_connexion.html" class="nav-link logout-link">Se déconnecter</a>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="live.html">Live</a>
+      <a href="#">Capteurs</a>
+      <a href="acceuil_hors_connexion.html">Se déconnecter</a>
     </nav>
   </div>
 </header>
-
-<script>
-  // Mobile menu toggle
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
-    const mainNav = document.getElementById('main-nav');
-    
-    if (mobileMenuBtn && mainNav) {
-      mobileMenuBtn.addEventListener('click', function() {
-        mainNav.classList.toggle('active');
-        mobileMenuBtn.classList.toggle('active');
-      });
-    }
-    
-    // Add active class to current page
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-        link.classList.add('active');
-      }
-    });
-    
-    // Handle dropdown on mobile and desktop
-    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-    
-    dropdownToggles.forEach(toggle => {
-      toggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        const dropdown = this.parentElement;
-        
-        // Close other dropdowns
-        document.querySelectorAll('.dropdown').forEach(d => {
-          if (d !== dropdown) d.classList.remove('show-dropdown');
-        });
-        
-        dropdown.classList.toggle('show-dropdown');
-      });
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-        mainNav.classList.remove('active');
-        mobileMenuBtn.classList.remove('active');
-        
-        // Close dropdowns
-        document.querySelectorAll('.dropdown').forEach(d => {
-          d.classList.remove('show-dropdown');
-        });
-      }
-    });
-    
-    // Check if links exist and add error handling
-    navLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href && href !== '#') {
-          // Add a small delay to show loading state
-          this.style.opacity = '0.7';
-          setTimeout(() => {
-            this.style.opacity = '1';
-          }, 200);
-        }
-      });
-    });
-  });
-</script>
 
 </body>
 </html>
