@@ -81,32 +81,25 @@
         <p>Veuillez entrer votre adresse e-mail pour recevoir un lien de réinitialisation.</p>
         <?php
         require __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../database.php';
         use PHPMailer\PHPMailer\PHPMailer;
         use PHPMailer\PHPMailer\Exception;
-
-
-        $host = '144.76.54.100';
-        $dbname = 'G2';
-        $user = 'G2';
-        $pass = 'APPG2-BDD';
-
-        $conn = new mysqli($host, $user, $pass, $dbname);
-        if ($conn->connect_error) {
-            die("Échec de la connexion : " . $conn->connect_error);
-        }
+        $pdo = getPDO();
+        $smtp = getSMTPConfig();
 
         $message = "";
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'])) {
-            $email = $conn->real_escape_string($_POST['email']);
-            $sql = "SELECT * FROM utilisateur WHERE email='$email'";
-            $result = $conn->query($sql);
+            $email = $_POST['email'];
+            $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
+            $stmt->execute([$email]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($result->num_rows > 0) {
+            if ($result) {
                 $token = bin2hex(random_bytes(50));
                 $expire_time = date("Y-m-d H:i:s", strtotime('+24 hour'));
-                $sql = "UPDATE utilisateur SET token='$token', token_expiration='$expire_time' WHERE email='$email'";
-                $conn->query($sql);
+                $update = $pdo->prepare("UPDATE utilisateur SET token = ?, token_expiration = ? WHERE email = ?");
+                $update->execute([$token, $expire_time, $email]);
 
                 // Vérifie le port MAMP
                 $port = "8888"; // Change si nécessaire
@@ -116,14 +109,14 @@
 
                 try {
                     $mail->isSMTP();
-                    $mail->Host       = 'smtp.gmail.com';
+                    $mail->Host       = $smtp['host'];
                     $mail->SMTPAuth   = true;
-                    $mail->Username   = 'dbreeze.g2aisep@gmail.com';
-                    $mail->Password   = 'emxz uzkh qzhn iycd';
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = 587;
+                    $mail->Username   = $smtp['username'];
+                    $mail->Password   = $smtp['password'];
+                    $mail->SMTPSecure = $smtp['encryption'];
+                    $mail->Port       = $smtp['port'];
 
-                    $mail->setFrom('dbreeze.g2aisep@gmail.com', 'DBreeze Support');
+                    $mail->setFrom($smtp['username'], 'DBreeze Support');
                     $mail->addAddress($email);
 
                     $mail->isHTML(true);
@@ -140,7 +133,7 @@
             }
         }
 
-        $conn->close();
+        $pdo = null;
         ?>
         <form method="POST">
             <input type="email" id="email" name="email" placeholder="Votre adresse e-mail" required>
