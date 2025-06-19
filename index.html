@@ -11,110 +11,98 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="header-placeholder" role="banner"></div>
+  <div id="header-placeholder"></div>
 
-  <main id="main-content" role="main">
-    <section class="hero" aria-labelledby="hero-heading">
+  <main>
+    <section class="hero">
       <div class="hero-content">
-        <h1 id="hero-heading">Supervision en temps réel</h1>
+        <h1>Supervision en temps réel</h1>
         <p>Contrôlez votre environnement en un coup d'œil</p>
       </div>
     </section>
 
-    <!-- Message de bienvenue -->
-    <div class="welcome-message" id="welcome-message" aria-live="polite"></div>
+    <!-- ✅ Message de bienvenue -->
+    <div class="welcome-message" id="welcome-message"></div>
 
-    <!-- Compteur de décibels dynamique -->
-    <section class="decibel-led" aria-labelledby="sonore-heading">
-      <h3 id="sonore-heading">Niveau sonore actuel</h3>
-      <div class="led-display" id="niveau-sonore" aria-live="polite">Chargement...</div>
+    <!-- ✅ Compteur de décibels dynamique -->
+    <section class="decibel-led">
+      <h3>Niveau sonore actuel</h3>
+      <div class="led-display" id="niveau-sonore">...</div>
     </section>
 
-    <!-- Tableau de bord -->
-    <section id="supervision" class="sensors-section" aria-labelledby="dashboard-heading">
+    <!-- ✅ Tableau de bord -->
+    <section id="supervision" class="sensors-section">
       <div class="section-title">
-        <h2 id="dashboard-heading">TABLEAU DE BORD</h2>
+        <h2>TABLEAU DE BORD</h2>
         <p class="subtitle">Tous vos capteurs en temps réel</p>
       </div>
 
       <div class="sensors-grid">
-        <a href="sonore.html" class="sensor-card sound" aria-labelledby="sound-heading">
+        <div class="sensor-card sound" onclick="window.location.href='sonore.html'">
           <div class="card-content">
-            <i class="fas fa-volume-up" aria-hidden="true"></i>
-            <h3 id="sound-heading">Niveau Sonore</h3>
+            <i class="fas fa-volume-up"></i>
+            <h3>Niveau Sonore</h3>
             <p>Ambiance parfaitement maîtrisée</p>
           </div>
-        </a>
+        </div>
 
-        <a href="luminosite.html" class="sensor-card lighting" aria-labelledby="light-heading">
+        <div class="sensor-card lighting" onclick="window.location.href='luminosite.html'">
           <div class="card-content">
-            <i class="fas fa-lightbulb" aria-hidden="true"></i>
-            <h3 id="light-heading">Luminosité</h3>
+            <i class="fas fa-lightbulb"></i>
+            <h3>Luminosité</h3>
             <p>Une atmosphère unique</p>
           </div>
-        </a>
+        </div>
 
-        <a href="temphum.html" class="sensor-card co2" aria-labelledby="humidity-heading">
+        <button class="sensor-card co2" onclick="window.location.href='temphum.html'">
           <div class="card-content">
-            <i class="fas fa-wind" aria-hidden="true"></i>
-            <h3 id="humidity-heading">Humidité de l'air</h3>
+            <i class="fas fa-wind"></i>
+            <h3>Humidité de l'air</h3>
             <p>Respirez la différence</p>
           </div>
-        </a>
+        </button>
 
-        <a href="temphum.html" class="sensor-card temperature" aria-labelledby="temp-heading">
+        <button class="sensor-card temperature" onclick="window.location.href='temphum.html'">
           <div class="card-content">
-            <i class="fas fa-temperature-high" aria-hidden="true"></i>
-            <h3 id="temp-heading">Température & Humidité</h3>
+            <i class="fas fa-temperature-high"></i>
+            <h3>Température & Humidité</h3>
             <p>Confort optimal</p>
           </div>
-        </a>
+        </button>
 
-        <a href="#" class="sensor-card crowd" aria-labelledby="crowd-heading">
+        <button class="sensor-card crowd" onclick="window.location.href='#'">
           <div class="card-content">
-            <i class="fas fa-users" aria-hidden="true"></i>
-            <h3 id="crowd-heading">Affluence</h3>
+            <i class="fas fa-users"></i>
+            <h3>Affluence</h3>
             <p>Gestion intelligente des espaces</p>
           </div>
-        </a>
+        </button>
 
-        <a href="distance.html" class="sensor-card security" aria-labelledby="security-heading">
+        <div class="sensor-card security" onclick="window.location.href='distance.html'">
           <div class="card-content">
-            <i class="fas fa-shield-alt" aria-hidden="true"></i>
-            <h3 id="security-heading">Sécurité</h3>
+            <i class="fas fa-shield-alt"></i>
+            <h3>Sécurité</h3>
             <p>Protection continue</p>
           </div>
-        </a>
+        </div>
       </div>
     </section>
   </main>
 
-  <div id="footer-placeholder" role="contentinfo"></div>
+  <div id="footer-placeholder"></div>
 
-  <!-- Scripts -->
+  <!-- ✅ Scripts -->
   <script>
     async function includeHTML(selector, url) {
-      try {
-        const element = document.querySelector(selector);
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-          throw new Error(`Failed to load ${url}: ${response.status} ${response.statusText}`);
-        }
-        
-        const html = await response.text();
-        element.innerHTML = html;
-      } catch (error) {
-        console.error(`Error including HTML from ${url}:`, error);
-        document.querySelector(selector).innerHTML = `<div class="error-message">Impossible de charger le contenu. Veuillez rafraîchir la page.</div>`;
-      }
+      const element = document.querySelector(selector);
+      const response = await fetch(url);
+      const html = await response.text();
+      element.innerHTML = html;
     }
 
-    // Load header and footer
     includeHTML("#header-placeholder", "header.html");
     includeHTML("#footer-placeholder", "footer.html");
 
-    // Welcome message
     const params = new URLSearchParams(window.location.search);
     const prenom = params.get("prenom");
     if (prenom) {
@@ -122,55 +110,21 @@
       welcome.innerHTML = `<h2 style="text-align:center; color: var(--color-primary); margin: 3rem 0;">Bienvenue ${prenom} 👋</h2>`;
     }
 
-    // Mise à jour dynamique du niveau sonore avec gestion d'erreurs
+    // ✅ Mise à jour dynamique du niveau sonore
     async function updateNiveauSonore() {
       try {
         const response = await fetch('get_last_sonore.php');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
         const data = await response.json();
         const valeur = data.sonore !== null ? `${data.sonore} dB` : 'N/A';
-        
-        const element = document.getElementById('niveau-sonore');
-        element.textContent = valeur;
-        
-        // Add color coding based on sound level
-        if (data.sonore !== null) {
-          const level = parseFloat(data.sonore);
-          element.className = 'led-display';
-          
-          if (level < 60) {
-            element.classList.add('level-normal');
-          } else if (level < 85) {
-            element.classList.add('level-medium');
-          } else {
-            element.classList.add('level-high');
-          }
-        }
+        document.getElementById('niveau-sonore').textContent = valeur;
       } catch (error) {
         console.error('Erreur de récupération sonore :', error);
-        document.getElementById('niveau-sonore').textContent = 'Erreur de connexion';
+        document.getElementById('niveau-sonore').textContent = 'Erreur';
       }
     }
 
-    // Initial update and interval
     updateNiveauSonore();
-    
-    // Use a more efficient interval
-    const updateInterval = setInterval(updateNiveauSonore, 1000);
-    
-    // Clean up interval when page is hidden
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
-        clearInterval(updateInterval);
-      } else {
-        updateNiveauSonore();
-        setInterval(updateNiveauSonore, 1000);
-      }
-    });
+    setInterval(updateNiveauSonore, 100);
   </script>
 </body>
 </html>
