@@ -1,77 +1,69 @@
 <?php
 session_start();
-require_once 'database.php';
 
-// Validate CSRF token
-if (!isset($_POST['csrf_token']) || !validateCSRFToken($_POST['csrf_token'])) {
-    header("Location: connexion.php?error=Session expirée. Veuillez réessayer.");
-    exit();
+/* ---------- 1) Connexion MySQLi ---------- */
+$host   = '144.76.54.100';
+$dbname = 'G2';
+$user   = 'G2';
+$pass   = 'APPG2-BDD';
+
+$conn = new mysqli($host, $user, $pass, $dbname);
+if ($conn->connect_error) {
+    die('Erreur de connexion : ' . $conn->connect_error);
 }
 
-// Validate form data
-if (!isset($_POST['username']) || !isset($_POST['password'])) {
-    header("Location: connexion.php?error=Veuillez remplir tous les champs.");
-    exit();
-}
+/* ---------- 2) Logique de connexion ---------- */
+$message = '';
 
-$username = trim($_POST['username']);
-$password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-// Basic validation
-if (empty($username) || empty($password)) {
-    header("Location: connexion.php?error=Veuillez remplir tous les champs.");
-    exit();
-}
+    /* a) Champs obligatoires */
+    if ($username === '' || $password === '') {
+        $message = 'Veuillez remplir tous les champs.';
 
-try {
-    $pdo = getPDO();
-    
-    // Use prepared statement to prevent SQL injection
-    $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE pseudonyme = :username OR email = :email");
-    $stmt->execute([
-        ':username' => $username,
-        ':email' => $username // Allow login with email too
-    ]);
-    
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($user && password_verify($password, $user['mot_de_passe'])) {
-        // Login successful
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['pseudonyme'];
-        $_SESSION['prenom'] = $user['prenom'];
-        $_SESSION['logged_in'] = true;
-        
-        // Regenerate session ID for security
-        session_regenerate_id(true);
-        
-        // Log successful login
-        $log_stmt = $pdo->prepare("INSERT INTO login_logs (user_id, status, ip_address) VALUES (:user_id, 'success', :ip)");
-        $log_stmt->execute([
-            ':user_id' => $user['id'],
-            ':ip' => $_SERVER['REMOTE_ADDR']
-        ]);
-        
-        // Redirect to dashboard with user's first name
-        header("Location: index.html?prenom=" . urlencode($user['prenom']));
-        exit();
     } else {
-        // Log failed login attempt
-        if ($user) {
-            $log_stmt = $pdo->prepare("INSERT INTO login_logs (user_id, status, ip_address) VALUES (:user_id, 'failed', :ip)");
-            $log_stmt->execute([
-                ':user_id' => $user['id'],
-                ':ip' => $_SERVER['REMOTE_ADDR']
-            ]);
+        /* b) Recherche de l’utilisateur */
+        $stmt = $conn->prepare('SELECT * FROM utilisateur WHERE pseudonyme = ?');
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+
+            /* c) Vérification du mot de passe */
+            if (password_verify($password, $user['mot_de_passe'])) {
+                $_SESSION['user_logged_in']  = true;
+                $_SESSION['user_id']         = $user['id'];
+                $_SESSION['user_prenom']     = $user['prenom'];
+                $_SESSION['user_nom']        = $user['nom'];
+                $_SESSION['user_pseudonyme'] = $user['pseudonyme'];
+
+                header('Location: index.html?prenom=' . urlencode($user['prenom']));
+                exit;
+            } else {
+                $message = 'Mot de passe incorrect.';
+            }
+        } else {
+            $message = "Ce compte n'existe pas encore. Veuillez vous inscrire d'abord.";
         }
-        
-        header("Location: connexion.php?error=Identifiants incorrects.");
-        exit();
+        $stmt->close();
     }
-} catch (PDOException $e) {
-    // Log error but don't expose details to user
-    error_log("Login error: " . $e->getMessage());
-    header("Location: connexion.php?error=Une erreur est survenue. Veuillez réessayer plus tard.");
-    exit();
+}
+
+/* ---------- 3) Déconnexion (facultatif) ---------- */
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header('Location: ../connexion.php?logout=success');
+    exit;
+}
+
+/* ---------- 4) Retour à la page de connexion avec message ---------- */
+if ($message !== '') {
+    header('Location: ../connexion.php?error=' . urlencode($message));
+    exit;
 }
 ?>

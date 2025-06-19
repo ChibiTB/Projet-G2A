@@ -1,37 +1,42 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
 
-require_once 'database.php';
+$host = '144.76.54.100';
+$dbname = 'G2';
+$user = 'G2';
+$pass = 'APPG2-BDD';
 
 try {
-    $pdo = getPDO();
-    
-    // Get distance measurements from the last 24 hours
-    $sql = "SELECT valeur_mesure as distance, date_mesure as date 
-            FROM mesures 
-            WHERE id_objet = 4 
-            AND date_mesure >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-            AND valeur_mesure IS NOT NULL
-            ORDER BY date_mesure DESC 
-            LIMIT 100";
-    
-    $stmt = $pdo->prepare($sql);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $stmt = $pdo->prepare("SELECT id_objet, date_mesure, valeur_mesure
+        FROM mesures
+        WHERE id_objet = 4
+        ORDER BY date_mesure DESC
+        LIMIT 50");
     $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Convert to proper format
-    $data = array_map(function($row) {
-        return [
-            'distance' => (float)$row['distance'],
-            'date' => $row['date']
-        ];
-    }, $results);
-    
-    echo json_encode(array_reverse($data)); // Reverse to show chronological order
-    
+    $rows = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
+
+    $grouped = [];
+
+    foreach ($rows as $row) {
+        $date = $row['date_mesure'];
+        $valeur = floatval($row['valeur_mesure']);
+        $id_objet = $row['id_objet'];
+
+        if (!isset($grouped[$date])) {
+            $grouped[$date] = ['date' => $date];
+        }
+
+        if ($id_objet == 4) {
+            $grouped[$date]['distance'] = $valeur;
+        }
+    }
+
+    echo json_encode(array_values($grouped), JSON_UNESCAPED_UNICODE);
+
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-}
-?>
+    echo json_encode(['error' => $e->getMessage()]);
+} 
