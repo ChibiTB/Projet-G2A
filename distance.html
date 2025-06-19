@@ -13,7 +13,7 @@
 
   <main id="main-content" class="main-capteurs">
     <div class="containers">
-      <h2>Distance – Suivi en temps réel</h2>
+      <h2>Nombre de Personnes – Suivi en temps réel</h2>
       <canvas id="graphiqueCapteurs"></canvas>
     </div>
   </main>
@@ -60,7 +60,7 @@
         labels: [],
         datasets: [
           {
-            label: 'Distance (m)',
+            label: 'Nombre de Personnes',
             data: [],
             borderColor: 'rgba(75, 192, 192, 1)',
             backgroundColor: 'rgba(75, 192, 192, 0.1)',
@@ -76,7 +76,7 @@
             beginAtZero: false,
             title: {
               display: true,
-              text: 'Distance (m)'
+              text: 'Nombre de Personnes'
             }
           },
           x: {
@@ -92,7 +92,7 @@
           },
           title: {
             display: true,
-            text: 'Évolution en temps réel de la distance'
+            text: 'Évolution en temps réel du nombre de personnes'
           }
         }
       }

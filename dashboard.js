@@ -79,7 +79,7 @@ const chartDistance = new Chart(document.getElementById('graphDistance').getCont
   data: {
     labels: [],
     datasets: [{
-      label: 'Distance (m)',
+      label: 'Nombre de Personnes',
       data: [],
       borderColor: 'rgba(75, 192, 192, 1)',
       backgroundColor: 'rgba(75, 192, 192, 0.1)',
@@ -90,14 +90,14 @@ const chartDistance = new Chart(document.getElementById('graphDistance').getCont
   options: {
     responsive: true,
     scales: {
-      y: { beginAtZero: false, title: { display: true, text: 'Distance (m)' } },
+      y: { beginAtZero: false, title: { display: true, text: 'Nombre de Personnes' } },
       x: { title: { display: true, text: 'Heure' } }
     },
     plugins: {
       legend: { position: 'top' },
       title: {
         display: true,
-        text: 'Évolution Distance',
+        text: 'Évolution du Nombre de Personnes',
         font: { size: 20 }
       }
     }
